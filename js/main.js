@@ -1,6 +1,15 @@
 (() => {
   "use strict";
   const C = window.BIRTHDAY_CONFIG || {};
+
+  // Mode pratinjau dari editor.html (?draft): pakai isian editor & file lokal yang dipilih di sana
+  const DRAFT = /[?&]draft/.test(location.search);
+  let BLOBS = {};
+  if (DRAFT) {
+    try { Object.assign(C, JSON.parse(localStorage.getItem("bday-draft") || "{}")); } catch (e) { /* abaikan */ }
+    try { BLOBS = (window.parent !== window && window.parent.EDITOR_BLOBS) || {}; } catch (e) { /* beda origin */ }
+  }
+  const src = path => BLOBS[path] || path;
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const rand = (a, b) => a + Math.random() * (b - a);
@@ -146,7 +155,7 @@
   });
   // Klik di mana saja = ledakan kecil
   window.addEventListener("click", e => {
-    if (e.target.closest("button, a, .photo-card, .flip, .envelope, #lightbox, .gift")) return;
+    if (e.target.closest("button, a, .photo-card, .flip, .envelope, #lightbox, .gift, .buddy")) return;
     if (document.body.classList.contains("locked")) return;
     explode(e.clientX, e.clientY, PARTY, 50);
   });
@@ -204,7 +213,7 @@
     }
     async function start() {
       if (C.musik) {
-        audioEl = audioEl || Object.assign(new Audio(C.musik), { loop: true, volume: .7 });
+        audioEl = audioEl || Object.assign(new Audio(src(C.musik)), { loop: true, volume: .7 });
         try { await audioEl.play(); playing = true; return; } catch (e) { audioEl = null; }
       }
       if (!actx) initSynth();
@@ -240,14 +249,27 @@
   const EMO_BASE = "https://fonts.gstatic.com/s/e/notoemoji/latest/";
   const EMO_RE = /(\p{Extended_Pictographic}\uFE0F?(?:\u200D\p{Extended_Pictographic}\uFE0F?)*)/u;
   const emoMissing = new Set();
+  const LOCAL_EMO = new Set(window.LOCAL_EMOJI || []);
   const emoCode = ch => [...ch].map(c => c.codePointAt(0).toString(16)).join("_");
+  const emoLocal = ch => emoCode(ch).replace(/_fe0f/g, "").replace(/^fe0f_?/, "");
   function emoText(ch) { const t = document.createElement("span"); t.className = "emo"; t.textContent = ch; return t; }
+  // Urutan: file lokal (assets/emoji, hasil tools/emoji.py) → CDN Google → emoji biasa
   function emo(ch) {
     if (C.emojiAnimasi === false || emoMissing.has(ch)) return emoText(ch);
     const img = new Image();
     img.className = "emo"; img.alt = ch; img.draggable = false; img.decoding = "async";
-    img.onerror = () => { emoMissing.add(ch); img.replaceWith(emoText(ch)); };
-    img.src = `${EMO_BASE}${emoCode(ch)}/512.webp`;
+    const local = LOCAL_EMO.has(emoLocal(ch));
+    const sources = [
+      ...(local ? [`assets/emoji/${emoLocal(ch)}.webp`] : []),
+      ...(C.emojiCDN !== false ? [`${EMO_BASE}${emoCode(ch)}/512.webp`] : [])
+    ];
+    if (!sources.length) return emoText(ch);
+    let k = 0;
+    img.onerror = () => {
+      if (++k < sources.length) img.src = sources[k];
+      else { emoMissing.add(ch); img.replaceWith(emoText(ch)); }
+    };
+    img.src = sources[0];
     return img;
   }
   // Ubah teks biasa jadi teks + emoji animasi
@@ -260,6 +282,23 @@
   }
   // Isi semua elemen [data-emo]
   $$("[data-emo]").forEach(el => el.prepend(emo(el.dataset.emo)));
+
+  // Stiker: file milik sendiri (config.stiker) atau kucing animasi bawaan (js/stickers.js)
+  const STK = C.stiker || {};
+  function sticker(where, pose) {
+    const wrap = document.createElement("div");
+    wrap.className = "sticker-wrap";
+    const builtin = () => { wrap.innerHTML = window.catSticker ? window.catSticker(pose) : ""; };
+    if (STK[where]) {
+      const img = new Image();
+      img.className = "sticker-img"; img.alt = "stiker"; img.draggable = false;
+      img.onerror = builtin;
+      img.src = src(STK[where]);
+      wrap.appendChild(img);
+    } else builtin();
+    return wrap;
+  }
+  $$("[data-sticker]").forEach(el => el.appendChild(sticker(el.dataset.sticker, el.dataset.pose)));
 
   // Hujan emoji
   const rainBox = $("#emojiRain");
@@ -325,7 +364,7 @@
   photos.forEach((p, i) => {
     const fig = document.createElement("figure");
     fig.className = "photo-card"; fig.dataset.i = i;
-    fig.appendChild(imgWithFallback(p.src, p.caption, i));
+    fig.appendChild(imgWithFallback(src(p.src), p.caption, i));
     const cap = document.createElement("figcaption"); cap.textContent = p.caption || ""; fig.appendChild(cap);
     carousel.appendChild(fig);
   });
@@ -337,7 +376,7 @@
     item.className = "tl-item"; item.setAttribute("data-reveal", "");
     item.innerHTML = `<div class="tl-card">${k.foto ? '<div class="tl-photo"></div>' : ""}
       <div class="tl-body"><div class="tl-date"></div><h3></h3><p></p></div></div>`;
-    if (k.foto) $(".tl-photo", item).appendChild(imgWithFallback(k.foto, k.judul, i + 2));
+    if (k.foto) $(".tl-photo", item).appendChild(imgWithFallback(src(k.foto), k.judul, i + 2));
     $(".tl-date", item).textContent = k.tanggal || "";
     $("h3", item).textContent = k.judul || "";
     $("p", item).textContent = k.teks || "";
@@ -349,14 +388,16 @@
   const videoEmpty = () => {
     vi.innerHTML = `<div class="video-empty"><div class="play">▶</div><p>Taruh videomu di <code>${V.src || "assets/videos/video.mp4"}</code></p><p>atau isi <code>video.youtube</code> di js/config.js</p></div>`;
   };
-  if (V.youtube) {
-    vi.innerHTML = `<iframe src="https://www.youtube.com/embed/${encodeURIComponent(V.youtube)}?rel=0" title="Video ulang tahun" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+  // terima ID maupun link YouTube lengkap (watch?v=, youtu.be/, shorts/)
+  const ytId = V.youtube ? (V.youtube.match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([\w-]{11})/)?.[1] || V.youtube.trim()) : "";
+  if (ytId) {
+    vi.innerHTML = `<iframe src="https://www.youtube.com/embed/${encodeURIComponent(ytId)}?rel=0" title="Video ulang tahun" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
   } else if (V.src) {
     const v = document.createElement("video");
     v.controls = true; v.playsInline = true; v.preload = "metadata";
-    if (V.poster) v.poster = V.poster;
+    if (V.poster) v.poster = src(V.poster);
     v.onerror = videoEmpty;
-    const s = document.createElement("source"); s.src = V.src; s.onerror = videoEmpty; v.appendChild(s);
+    const s = document.createElement("source"); s.src = src(V.src); s.onerror = videoEmpty; v.appendChild(s);
     // saat video diputar, kecilkan musik latar
     v.addEventListener("play", () => { if (Music.playing) { Music.stop(); musicBtn.classList.add("paused"); } });
     vi.appendChild(v);
@@ -390,7 +431,7 @@
 
   // Hitung mundur sampai hari-H (opsional)
   const target = C.tanggalUltah ? new Date(C.tanggalUltah) : null;
-  if (target && !isNaN(target) && target > Date.now() && !/[?&]preview/.test(location.search)) {
+  if (target && !isNaN(target) && target > Date.now() && !/[?&](preview|draft)/.test(location.search)) {
     locked = true;
     const cd = $("#countdown"), btn = $("#openBtn"), btnLabel = btn.innerHTML;
     cd.hidden = false; btn.disabled = true; $("span", btn).textContent = "⏳ Belum waktunya…";
@@ -421,6 +462,7 @@
       main.classList.add("show"); main.setAttribute("aria-hidden", "false");
       show(6, 400);
       emojiRain();
+      setTimeout(() => $("#buddy").classList.add("show"), 2500);
       startBalloons();
       countAge();
     }, 1300);
@@ -585,7 +627,7 @@
     lbI = (i + photos.length) % photos.length;
     const p = photos[lbI];
     lbImg.onerror = () => { lbImg.removeAttribute("src"); lbImg.alt = "Foto belum ditambahkan"; };
-    lbImg.src = p.src; lbImg.alt = p.caption || "";
+    lbImg.src = src(p.src); lbImg.alt = p.caption || "";
     lbCap.textContent = p.caption || "";
     lb.classList.add("open"); lb.setAttribute("aria-hidden", "false");
   }
@@ -657,6 +699,14 @@
       chatStatus.textContent = "online";
       await wait(450);
     }
+    await wait(300);
+    const st = document.createElement("div");
+    st.className = "bubble aku sticker";
+    st.appendChild(sticker("chat", "cium"));
+    const tm = document.createElement("time");
+    tm.textContent = new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }) + " ✓✓";
+    st.appendChild(tm);
+    chatBody.appendChild(st);
     hearts(15);
   }
 
@@ -752,6 +802,25 @@
     });
   }
   if (quiz.length) renderQuiz(); else $("#quiz").remove();
+
+  /* =========================================================
+     10e. TEMAN KUCING — ketuk untuk ganti pose & dapat pesan
+     ========================================================= */
+  const buddy = $("#buddy"), buddyBubble = $("#buddyBubble");
+  const POSES = ["lambai", "cium", "peluk"];
+  const KATA = C.kataTeman && C.kataTeman.length ? C.kataTeman : ["Selamat ulang tahun! 🎂"];
+  let pose = 0, kata = 0, bubbleT;
+  buddy.addEventListener("click", () => {
+    if (!STK.teman) {
+      pose = (pose + 1) % POSES.length;
+      $(".sticker-wrap", buddy).innerHTML = window.catSticker(POSES[pose]);
+    }
+    emojify(buddyBubble, KATA[kata++ % KATA.length]);
+    buddyBubble.classList.add("show");
+    clearTimeout(bubbleT); bubbleT = setTimeout(() => buddyBubble.classList.remove("show"), 2600);
+    const r = buddy.getBoundingClientRect();
+    for (let i = 0; i < 8; i++) particles.push(new P({ type: "heart", x: r.left + r.width / 2 + rand(-30, 30), y: r.top + 20, vx: rand(-1.2, 1.2), vy: -rand(2, 4), g: .02, drag: .99, decay: .012, size: rand(14, 24), color: ["#ff5c7c", "#ff8fa6", "#f5d27a"][i % 3] }));
+  });
 
   /* =========================================================
      11. SCROLL REVEAL, PROGRESS, AUTO-FX PER SECTION

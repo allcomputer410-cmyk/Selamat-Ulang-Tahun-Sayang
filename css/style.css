@@ -383,7 +383,11 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
     radial-gradient(circle at 30% 20%, rgba(245,210,122,.18), transparent 60%),
     linear-gradient(160deg, #24143a, #120d1c);
 }
-.flip-front .ic { font-size: 3rem; filter: drop-shadow(0 0 14px rgba(245,210,122,.6)); animation: giftFloat 3s ease-in-out infinite; }
+.flip-front .ic {
+  font-size: 3rem; animation: giftFloat 3s ease-in-out infinite; padding: 10px; border-radius: 50%;
+  /* cahaya lembut di belakang ikon (drop-shadow menimbulkan kotak samar pada gambar animasi) */
+  background: radial-gradient(circle, rgba(245,210,122,.28), transparent 68%);
+}
 .flip-front h4 { font-family: var(--serif); font-size: 1.4rem; color: var(--gold-1); }
 .flip-front small { color: var(--muted); font-size: .7rem; letter-spacing: .15em; text-transform: uppercase; }
 .flip-back {
@@ -441,7 +445,7 @@ button { font: inherit; cursor: pointer; border: 0; background: none; color: inh
 @keyframes blink { 50% { opacity: 0; } }
 
 /* ---------- Penutup ---------- */
-#finale { overflow: hidden; }
+#finale { overflow: hidden; padding-bottom: 150px; }
 .finale-title {
   font-size: clamp(4rem, 16vw, 10rem); line-height: 1.1;
   background: var(--gold-grad); background-size: 200% auto; -webkit-background-clip: text; background-clip: text; color: transparent;
@@ -673,4 +677,88 @@ span.emo, i.emo { width: auto; height: auto; }
   .countdown div { min-width: 58px; }
   .hero-floaters span { opacity: .55; }
   .game-box { height: 420px; }
+}
+
+/* =========================================================
+   STIKER KUCING (js/stickers.js)
+   ========================================================= */
+.cat-sticker { width: 100%; height: auto; display: block; overflow: visible; }
+.cat-sticker g, .cat-sticker path, .cat-sticker ellipse { transform-box: fill-box; }
+.cs-a { transform-origin: 50% 100%; }
+.cs-b { transform-origin: 50% 100%; }
+.cs-blink { transform-origin: center; animation: csBlink 4.2s infinite; }
+@keyframes csBlink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
+.cs-blush { animation: csBlush 2.4s ease-in-out infinite; }
+@keyframes csBlush { 50% { opacity: .5; } }
+.cs-heart { opacity: 0; transform-origin: center; }
+.cs-bow { transform-origin: 50% 50%; animation: csBow 1.6s ease-in-out infinite; }
+@keyframes csBow { 50% { transform: rotate(10deg) scale(1.08); } }
+
+/* Pose: cium */
+.pose-cium .cs-b { animation: csKiss 2.4s cubic-bezier(.5,0,.3,1) infinite; }
+@keyframes csKiss {
+  0%, 18%, 100% { transform: translate(0, 0) rotate(0); }
+  38%, 58% { transform: translate(-9px, -12px) rotate(-9deg); }
+}
+.pose-cium .cs-a { animation: csShy 2.4s ease-in-out infinite; }
+@keyframes csShy { 0%, 30%, 100% { transform: rotate(0); } 45%, 60% { transform: rotate(-3deg) scale(1.01); } }
+.pose-cium .cs-a .cs-blush { animation: csBlushKiss 2.4s ease-in-out infinite; }
+@keyframes csBlushKiss { 0%, 35%, 100% { opacity: .55; transform: scale(1); } 50%, 65% { opacity: 1; transform: scale(1.35); } }
+.pose-cium .cs-heart.h1 { animation: csHeartPop 2.4s ease-out infinite; }
+.pose-cium .cs-heart.h2 { animation: csHeartPop 2.4s ease-out .15s infinite; }
+.pose-cium .cs-heart.h3 { animation: csHeartPop 2.4s ease-out .3s infinite; }
+@keyframes csHeartPop {
+  0%, 40% { opacity: 0; transform: translateY(8px) scale(.2); }
+  52% { opacity: 1; transform: translateY(0) scale(1.15); }
+  90% { opacity: 0; transform: translateY(-26px) scale(.9); }
+  100% { opacity: 0; }
+}
+
+/* Pose: peluk */
+.pose-peluk .cs-a { animation: csSwayA 1.8s ease-in-out infinite; }
+.pose-peluk .cs-b { animation: csSwayB 1.8s ease-in-out infinite; }
+@keyframes csSwayA { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg) translateY(-2px); } }
+@keyframes csSwayB { 0%, 100% { transform: rotate(-4deg) translateX(-4px); } 50% { transform: rotate(4deg) translateY(-3px); } }
+.pose-peluk .cs-paw-b { animation: csPat .6s ease-in-out infinite alternate; transform-origin: center; }
+@keyframes csPat { to { transform: translate(-3px, -3px); } }
+.pose-peluk .cs-heart { animation: csHeartFloat 3s ease-in infinite; }
+.pose-peluk .cs-heart.h2 { animation-delay: 1s; } .pose-peluk .cs-heart.h3 { animation-delay: 2s; }
+@keyframes csHeartFloat {
+  0% { opacity: 0; transform: translateY(20px) scale(.4); }
+  20% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-50px) scale(.8) rotate(12deg); }
+}
+
+/* Pose: lambai */
+.pose-lambai .cs-a { animation: csBounce 1.2s ease-in-out infinite; }
+@keyframes csBounce { 50% { transform: translateY(-5px); } }
+.pose-lambai .cs-paw-a { transform-origin: 30% 90%; animation: csWave .5s ease-in-out infinite alternate; }
+@keyframes csWave { from { transform: translate(-88px, -26px) rotate(-30deg); } to { transform: translate(-92px, -34px) rotate(25deg); } }
+.pose-lambai .cs-b { animation: csPeek 3s ease-in-out infinite; }
+@keyframes csPeek { 0%, 100% { transform: translateX(4px) rotate(3deg); } 50% { transform: translateX(-2px) rotate(-2deg); } }
+.pose-lambai .cs-heart.h2 { animation: csHeartFloat 3s ease-in infinite; }
+
+/* Penempatan stiker */
+.sticker-img { width: 100%; height: auto; display: block; }
+.bubble.sticker { background: none !important; border: 0 !important; padding: 0; width: 150px; max-width: 60%; }
+.bubble.sticker time { color: var(--muted); }
+.letter-sticker { width: 120px; margin: 8px 0 0 auto; }
+.finale-sticker { width: min(260px, 60vw); margin: 0 auto 6px; filter: drop-shadow(0 18px 30px rgba(0,0,0,.45)); }
+.gate-sticker { position: absolute; right: -40px; bottom: -6px; width: 120px; z-index: 3; pointer-events: none; }
+.buddy {
+  position: fixed; left: 16px; bottom: 16px; z-index: 64; width: 110px; cursor: pointer; border: 0; background: none; padding: 0;
+  opacity: 0; transform: translateY(40px) scale(.6); transition: opacity .6s, transform .6s cubic-bezier(.3,1.5,.5,1);
+}
+.buddy.show { opacity: 1; transform: none; }
+.buddy:hover { transform: scale(1.08) rotate(-3deg); }
+.buddy-bubble {
+  position: absolute; left: 70px; bottom: 100%; white-space: nowrap; padding: 6px 12px; border-radius: 14px 14px 14px 4px;
+  background: #fff; color: #5b3524; font-size: .78rem; font-weight: 500; box-shadow: 0 6px 18px rgba(0,0,0,.35);
+  opacity: 0; transform: translateY(6px); transition: .3s; pointer-events: none;
+}
+.buddy-bubble.show { opacity: 1; transform: none; }
+@media (max-width: 720px) {
+  .buddy { width: 76px; left: 8px; bottom: 64px; }
+  .buddy-bubble { left: 50px; font-size: .7rem; white-space: normal; width: max-content; max-width: calc(100vw - 80px); }
+  .gate-sticker { width: 90px; right: -24px; }
 }

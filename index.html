@@ -38,6 +38,7 @@
       <div class="gift-box"></div>
       <div class="gift-glow"></div>
     </div>
+    <div class="gate-sticker" data-sticker="gerbang" data-pose="lambai"></div>
     </div>
     <button class="btn-gold" id="openBtn"><span><i data-emo="🎁" class="emo-btn"></i> Buka Kejutan</span></button>
     <p class="gate-hint">🔊 nyalakan suara untuk pengalaman terbaik</p>
@@ -196,6 +197,7 @@
             <p class="paper-to script">Untuk <span id="letterTo">Sayang</span>,</p>
             <div class="paper-text" id="letterText"></div>
             <p class="paper-from script">— <span id="letterFrom">Aku</span></p>
+            <div class="letter-sticker" data-sticker="surat" data-pose="peluk"></div>
           </div>
         </div>
         <div class="env-front"></div>
@@ -207,12 +209,13 @@
 
     <!-- PENUTUP -->
     <section id="finale" class="section">
+      <div class="finale-sticker" data-sticker="penutup" data-pose="cium" data-reveal></div>
       <div class="finale-emos" data-reveal>
         <span data-emo="🥳"></span><span data-emo="🎂"></span><span data-emo="💖"></span><span data-emo="🎉"></span><span data-emo="🥰"></span>
       </div>
       <h2 class="finale-title script" data-reveal>Happy Birthday</h2>
       <p class="finale-text" id="finaleText" data-reveal></p>
-      <button class="btn-gold" id="celebrateBtn" data-reveal><span><i data-emo="🎆" class="emo-btn"></i> Rayakan Lagi</span></button>
+      <button class="btn-gold" id="celebrateBtn" data-reveal><span><i data-emo="🎉" class="emo-btn"></i> Rayakan Lagi</span></button>
       <p class="credit">dibuat dengan ❤ untuk <span id="creditName">kamu</span></p>
     </section>
   </main>
@@ -228,6 +231,12 @@
     <a href="#letter" title="Surat"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg></a>
     <a href="#finale" title="Penutup"><svg viewBox="0 0 24 24"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7z"/></svg></a>
   </nav>
+
+  <!-- Teman kucing melayang -->
+  <button class="buddy" id="buddy" aria-label="Kucing lucu, ketuk aku">
+    <span class="buddy-bubble" id="buddyBubble"></span>
+    <span data-sticker="teman" data-pose="lambai"></span>
+  </button>
 
   <!-- Hujan emoji -->
   <div id="emojiRain" aria-hidden="true"></div>
@@ -246,6 +255,8 @@
   </div>
 
   <script src="js/config.js"></script>
+  <script src="js/emoji-local.js"></script>
+  <script src="js/stickers.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

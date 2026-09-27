@@ -22,6 +22,7 @@ Website ucapan ulang tahun yang mewah dan interaktif (tema **Midnight Gold**). D
 | ✉️ **Surat** | Amplop dengan segel lilin yang terbuka, kertas surat naik, lalu teks muncul dengan efek mengetik |
 | 🎇 **Penutup** | Tulisan "Happy Birthday" dan tombol "Rayakan Lagi" |
 | 🎵 **Musik** | Lagu "Happy Birthday" dimainkan oleh synth Web Audio (dengan reverb), jadi tidak perlu file mp3. Bisa juga memakai mp3 sendiri |
+| 🐱 **Stiker kucing animasi** | Pasangan kucing orisinal (SVG) yang bergerak: **cium**, **peluk**, dan **lambai**. Muncul di pembuka, chat, surat, dan penutup. Ada juga teman kucing di pojok yang bisa diketuk untuk ganti pose dan mengucapkan kalimat manis. Bisa diganti GIF milikmu sendiri |
 | 😍 **Emoji animasi** | Lebih dari 25 emoji animasi dari Google Noto: mengorbit kado, melayang di hero, di atas setiap judul, di dalam chat, kartu, tombol, dan **hujan emoji** di setiap momen perayaan |
 | 🧭 **Dock navigasi** | Dock ikon ala macOS (ikon SVG) untuk berpindah bagian, dengan penanda bagian yang sedang aktif |
 
@@ -29,7 +30,20 @@ Tampilan responsif di HP dan menghormati pengaturan *reduce motion*.
 
 ## 🛠️ Cara Personalisasi
 
-Cukup edit **`js/config.js`**:
+### Cara mudah: pakai editor (tanpa coding)
+
+Buka **`editor.html`** (misalnya `http://localhost:8000/editor.html` atau `https://<username>.github.io/<repo>/editor.html`):
+
+1. Isi semua bagian: nama, foto, cerita, chat, kuis, surat, stiker, dan lainnya. **Pratinjau langsung** di sampingnya ikut berubah.
+2. Foto, video, dan stiker bisa dipilih langsung dari perangkat untuk pratinjau.
+3. Klik **Unduh config.js**, lalu ganti file `js/config.js` di GitHub dengan file itu.
+4. Upload foto ke `assets/photos/`, video ke `assets/videos/`, dan stiker ke `assets/stickers/` dengan **nama file yang sama** seperti di editor.
+
+Isian editor tersimpan otomatis di browser, jadi aman kalau tab tertutup.
+
+### Cara manual
+
+Edit **`js/config.js`**:
 - `nama`, `dari`, `umur`, `tanggalLahir`
 - `foto`: daftar foto galeri. Taruh fotonya di `assets/photos/` (contoh: `1.jpg` sampai `8.jpg`)
 - `kenangan`: isi timeline
@@ -40,7 +54,21 @@ Cukup edit **`js/config.js`**:
 - `balonTarget`, `pesanRahasia`: pengaturan game balon
 - `kuis`: pertanyaan, pilihan, dan index jawaban benar
 - `tanggalUltah`: untuk hitung mundur (kosongkan jika tidak dipakai)
-- `emojiAnimasi`: `false` untuk memakai emoji biasa (lebih hemat kuota)
+- `stiker`: path GIF/WebP/PNG milikmu per lokasi (`gerbang`, `chat`, `surat`, `penutup`, `teman`). Kosongkan untuk memakai kucing bawaan
+- `kataTeman`: kalimat si teman kucing saat diketuk
+- `emojiAnimasi`: `false` untuk memakai emoji biasa
+- `emojiCDN`: `false` untuk hanya memakai emoji yang tersimpan di `assets/emoji/`
+
+### Emoji animasi tersimpan lokal
+
+Semua emoji yang dipakai sudah tersimpan di `assets/emoji/` (sekitar 30 file, total ±2,5 MB) dalam versi yang **diperkecil**, sehingga lebih ringan sekitar 3 kali lipat dan tetap tampil tanpa server Google. Kalau kamu menambah emoji baru di config:
+
+```bash
+pip install pillow
+python3 tools/emoji.py
+```
+
+Emoji yang belum tersimpan lokal tetap otomatis diambil dari CDN Google.
 
 Selama foto atau video belum ditambahkan, halaman menampilkan placeholder yang tetap rapi.
 
@@ -53,10 +81,21 @@ python3 -m http.server 8000
 # buka http://localhost:8000
 ```
 
-Fitur mikrofon butuh **HTTPS** atau `localhost`. Untuk dibagikan, aktifkan **GitHub Pages** (Settings → Pages → Deploy from branch), lalu kirim link-nya ke dia 💖
+Fitur mikrofon butuh **HTTPS** atau `localhost`.
+
+## 🌐 Online-kan dengan GitHub Pages
+
+Repo ini sudah punya workflow `.github/workflows/pages.yml` yang men-deploy otomatis setiap ada push ke `main`.
+
+1. Merge perubahan ke branch `main`.
+2. Buka **Settings → Pages → Build and deployment → Source**, pilih **GitHub Actions** (cukup sekali).
+3. Tunggu tab **Actions** selesai, lalu buka `https://<username>.github.io/<nama-repo>/` dan kirim link-nya ke dia 💖
+
+> ⚠️ Repo publik berarti foto dan isi surat bisa dilihat siapa pun yang punya link-nya.
 
 ## 🙏 Kredit & Inspirasi
 
+- Stiker kucing: gambar SVG orisinal buatan sendiri (bukan karakter berhak cipta), bebas dipakai di proyek ini.
 - Emoji animasi: [Google Noto Animated Emoji](https://googlefonts.github.io/noto-emoji-animation/) (CC BY 4.0), dimuat dari CDN `fonts.gstatic.com`. Jika gagal dimuat, otomatis diganti emoji biasa.
 - Ide fitur terinspirasi dari repo open-source populer (tanpa menyalin kodenya):
   - [faahim/happy-birthday](https://github.com/faahim/happy-birthday) (MIT, ±1.5k ⭐): alur ucapan yang muncul bertahap seperti chat

@@ -20,7 +20,10 @@ window.BIRTHDAY_CONFIG = {
   tanggalUltah: "",
 
   // Emoji animasi (Google Noto Animated Emoji). false = pakai emoji biasa.
+  // Emoji diambil dari assets/emoji/ (jalankan tools/emoji.py setelah menambah emoji baru);
+  // yang belum tersimpan lokal diambil dari CDN Google. emojiCDN: false = hanya pakai file lokal.
   emojiAnimasi: true,
+  emojiCDN: true,
 
   // Musik latar. Taruh file mp3 di assets/music/ lalu isi path-nya.
   // Kalau dikosongkan / file tidak ada, lagu "Happy Birthday" dimainkan otomatis (synth).
@@ -51,8 +54,21 @@ window.BIRTHDAY_CONFIG = {
   video: {
     src: "assets/videos/video.mp4",
     poster: "assets/photos/5.jpg",
-    youtube: "" // contoh: "dQw4w9WgXcQ" (jika diisi, src diabaikan)
+    youtube: "" // ID atau link YouTube, contoh: "https://youtu.be/dQw4w9WgXcQ" (jika diisi, src diabaikan)
   },
+
+  // Stiker. Kosongkan ("") untuk memakai stiker kucing animasi bawaan,
+  // atau isi path GIF/WebP/PNG milikmu sendiri, mis. "assets/stickers/cium.gif".
+  stiker: {
+    gerbang: "",  // di samping kado pembuka
+    chat: "",     // stiker terakhir di percakapan
+    surat: "",    // di bawah surat
+    penutup: "",  // di atas tulisan Happy Birthday
+    teman: ""     // teman kecil di pojok kiri bawah (bisa diketuk)
+  },
+
+  // Kalimat si teman kucing saat diketuk
+  kataTeman: ["Selamat ulang tahun! 🎂", "Kamu lucu banget 🥰", "Peluk dulu sini 🤗", "Jangan lupa bahagia ya ✨", "Muach! 😘"],
 
   // Percakapan ala chat (muncul satu per satu seperti sedang mengetik)
   chat: [
