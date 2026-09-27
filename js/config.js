@@ -18,7 +18,7 @@ window.BIRTHDAY_CONFIG = {
   // Tanggal & jam ulang tahun (YYYY-MM-DDTHH:MM, mengikuti jam di HP/laptop yang membuka).
   // Jika masih di masa depan, halaman menampilkan hitung mundur dan kado baru bisa dibuka saat waktunya tiba.
   // Kosongkan untuk langsung bisa dibuka. Tambahkan ?preview di URL untuk melewati hitung mundur.
-  tanggalUltah: "2026-09-28T00:00:00+07:00", // tepat jam 00.00 WIB
+  tanggalUltah: "", // SEMENTARA DIBUKA untuk testing — isi lagi "2026-09-28T00:00:00+07:00" untuk mengunci sampai 00.00 WIB
   zonaWaktu: "Asia/Jakarta",
   labelZona: "WIB",
 
