@@ -22,7 +22,6 @@ Website ucapan ulang tahun yang mewah dan interaktif (tema **Midnight Gold**). D
 | ✉️ **Surat** | Amplop dengan segel lilin yang terbuka, kertas surat naik, lalu teks muncul dengan efek mengetik |
 | 🎇 **Penutup** | Tulisan "Happy Birthday" dan tombol "Rayakan Lagi" |
 | 🎵 **Musik** | Lagu "Happy Birthday" dimainkan oleh synth Web Audio (dengan reverb), jadi tidak perlu file mp3. Bisa juga memakai mp3 sendiri |
-
 | 😍 **Emoji animasi** | Lebih dari 25 emoji animasi dari Google Noto: mengorbit kado, melayang di hero, di atas setiap judul, di dalam chat, kartu, tombol, dan **hujan emoji** di setiap momen perayaan |
 | 🧭 **Dock navigasi** | Dock ikon ala macOS (ikon SVG) untuk berpindah bagian, dengan penanda bagian yang sedang aktif |
 
