@@ -84,13 +84,10 @@ Tidak perlu install atau build apa pun. Pilih salah satu cara:
 
 Fitur mikrofon butuh **HTTPS** atau `localhost`.
 
-## 🌐 Online-kan dengan GitHub Pages
+## 🌐 Online (GitHub Pages)
 
-Repo ini sudah punya workflow `.github/workflows/pages.yml` yang men-deploy otomatis setiap ada push ke `main`.
-
-1. Merge perubahan ke branch `main`.
-2. Buka **Settings → Pages → Build and deployment → Source**, pilih **GitHub Actions** (cukup sekali).
-3. Tunggu tab **Actions** selesai, lalu buka `https://<username>.github.io/<nama-repo>/` dan kirim link-nya ke dia 💖
+Situs tayang di **https://allcomputer410-cmyk.github.io/Selamat-Ulang-Tahun-Sayang/** dari branch `gh-pages`.
+Workflow `.github/workflows/pages.yml` otomatis menyalin `main` ke `gh-pages` setiap ada push, jadi cukup update `main`.
 
 > ⚠️ Repo publik berarti foto dan isi surat bisa dilihat siapa pun yang punya link-nya.
 
