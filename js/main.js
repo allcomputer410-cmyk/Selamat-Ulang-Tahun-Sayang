@@ -235,6 +235,66 @@
   });
 
   /* =========================================================
+     2b. EMOJI ANIMASI (Google Noto Animated Emoji, CC BY 4.0)
+     ========================================================= */
+  const EMO_BASE = "https://fonts.gstatic.com/s/e/notoemoji/latest/";
+  const EMO_RE = /(\p{Extended_Pictographic}\uFE0F?(?:\u200D\p{Extended_Pictographic}\uFE0F?)*)/u;
+  const emoMissing = new Set();
+  const emoCode = ch => [...ch].map(c => c.codePointAt(0).toString(16)).join("_");
+  function emoText(ch) { const t = document.createElement("span"); t.className = "emo"; t.textContent = ch; return t; }
+  function emo(ch) {
+    if (C.emojiAnimasi === false || emoMissing.has(ch)) return emoText(ch);
+    const img = new Image();
+    img.className = "emo"; img.alt = ch; img.draggable = false; img.decoding = "async";
+    img.onerror = () => { emoMissing.add(ch); img.replaceWith(emoText(ch)); };
+    img.src = `${EMO_BASE}${emoCode(ch)}/512.webp`;
+    return img;
+  }
+  // Ubah teks biasa jadi teks + emoji animasi
+  function emojify(el, text) {
+    el.textContent = "";
+    text.split(EMO_RE).forEach((part, i) => {
+      if (!part) return;
+      el.appendChild(i % 2 ? emo(part) : document.createTextNode(part));
+    });
+  }
+  // Isi semua elemen [data-emo]
+  $$("[data-emo]").forEach(el => el.prepend(emo(el.dataset.emo)));
+
+  // Hujan emoji
+  const rainBox = $("#emojiRain");
+  const RAIN_SET = ["🎉", "🥳", "💖", "🎈", "✨", "🎂", "🥰", "🎊", "🌟", "💕"];
+  function emojiRain(list = RAIN_SET, n = 36) {
+    if (reduceMotion) return;
+    for (let i = 0; i < n; i++) {
+      const d = document.createElement("span");
+      d.className = "rain-drop";
+      d.style.left = rand(0, 96) + "vw";
+      d.style.fontSize = rand(22, 52) + "px";
+      d.style.animationDuration = rand(3.2, 6) + "s";
+      d.style.animationDelay = rand(0, 1.8) + "s";
+      d.style.setProperty("--r", rand(-200, 200) + "deg");
+      d.appendChild(emo(list[(Math.random() * list.length) | 0]));
+      d.addEventListener("animationend", () => d.remove());
+      rainBox.appendChild(d);
+    }
+  }
+
+  // Bunyi "pop" kecil untuk game balon
+  let sfxCtx;
+  function popSound() {
+    try {
+      sfxCtx = sfxCtx || new (window.AudioContext || window.webkitAudioContext)();
+      const t = sfxCtx.currentTime, len = sfxCtx.sampleRate * .12;
+      const buf = sfxCtx.createBuffer(1, len, sfxCtx.sampleRate), d = buf.getChannelData(0);
+      for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 4);
+      const src = sfxCtx.createBufferSource(), f = sfxCtx.createBiquadFilter(), g = sfxCtx.createGain();
+      src.buffer = buf; f.type = "bandpass"; f.frequency.value = rand(900, 1800); g.gain.value = .9;
+      src.connect(f); f.connect(g); g.connect(sfxCtx.destination); src.start(t);
+    } catch (e) { /* audio tidak tersedia */ }
+  }
+
+  /* =========================================================
      3. ISI KONTEN DARI CONFIG
      ========================================================= */
   const nama = C.nama || "Sayang";
@@ -309,7 +369,7 @@
     el.className = "flip"; el.setAttribute("data-reveal", ""); el.style.transitionDelay = `${i * .08}s`;
     el.tabIndex = 0; el.setAttribute("role", "button");
     el.innerHTML = `<div class="flip-inner"><div class="flip-face flip-front"><div class="ic"></div><h4></h4><small>ketuk aku</small></div><div class="flip-face flip-back"><p></p></div></div>`;
-    $(".ic", el).textContent = a.ikon || "✨";
+    $(".ic", el).appendChild(emo(a.ikon || "✨"));
     $("h4", el).textContent = a.depan || "";
     $(".flip-back p", el).textContent = a.belakang || "";
     const flip = () => {
@@ -326,9 +386,31 @@
      4. GERBANG / BUKA HADIAH
      ========================================================= */
   const gate = $("#gate"), gift = $("#gift"), main = $("#main");
-  let opened = false;
+  let opened = false, locked = false;
+
+  // Hitung mundur sampai hari-H (opsional)
+  const target = C.tanggalUltah ? new Date(C.tanggalUltah) : null;
+  if (target && !isNaN(target) && target > Date.now() && !/[?&]preview/.test(location.search)) {
+    locked = true;
+    const cd = $("#countdown"), btn = $("#openBtn"), btnLabel = btn.innerHTML;
+    cd.hidden = false; btn.disabled = true; $("span", btn).textContent = "⏳ Belum waktunya…";
+    const pad = n => String(n).padStart(2, "0");
+    const tick = () => {
+      const ms = target - Date.now();
+      if (ms <= 0) {
+        clearInterval(iv); locked = false; btn.disabled = false; btn.innerHTML = btnLabel;
+        cd.hidden = true; confetti(200); show(6, 300);
+        return;
+      }
+      $("#cdD").textContent = pad(Math.floor(ms / 864e5));
+      $("#cdH").textContent = pad(Math.floor(ms / 36e5) % 24);
+      $("#cdM").textContent = pad(Math.floor(ms / 6e4) % 60);
+      $("#cdS").textContent = pad(Math.floor(ms / 1e3) % 60);
+    };
+    const iv = setInterval(tick, 1000); tick();
+  }
   function openGift() {
-    if (opened) return; opened = true;
+    if (opened || locked) return; opened = true;
     gift.classList.add("open");
     Music.start().catch(() => {});
     musicBtn.classList.add("visible");
@@ -338,6 +420,7 @@
       document.body.classList.remove("locked");
       main.classList.add("show"); main.setAttribute("aria-hidden", "false");
       show(6, 400);
+      emojiRain();
       startBalloons();
       countAge();
     }, 1300);
@@ -415,7 +498,8 @@
     setTimeout(() => {
       $("#wishDone").classList.add("show");
       confetti(260); show(12, 250); hearts(40);
-      $("#blowBtn span").textContent = "🕯️ Nyalakan Lagi";
+      emojiRain(["🎂", "🥳", "🎉", "✨", "💖"], 40);
+      emojify($("#blowBtn span"), "🔥 Nyalakan Lagi");
     }, nCandles * 90 + 300);
     stopMic();
   }
@@ -423,7 +507,7 @@
     blown = false;
     $$(".candle", candleBox).forEach(c => { c.classList.remove("out"); $$(".smoke", c).forEach(s => s.remove()); });
     $("#wishDone").classList.remove("show");
-    $("#blowBtn span").textContent = "🎂 Tiup Lilin";
+    emojify($("#blowBtn span"), "🎂 Tiup Lilin");
   }
   $("#blowBtn").addEventListener("click", () => (blown ? relight() : blowOut()));
 
@@ -542,7 +626,132 @@
   /* =========================================================
      10. PENUTUP
      ========================================================= */
-  $("#celebrateBtn").addEventListener("click", () => { show(16, 200); confetti(200, true); hearts(40); });
+  $("#celebrateBtn").addEventListener("click", () => { show(16, 200); confetti(200, true); hearts(40); emojiRain(RAIN_SET, 50); });
+
+  /* =========================================================
+     10b. CHAT — pesan muncul satu per satu
+     ========================================================= */
+  const chatBody = $("#chatBody"), chatStatus = $("#chatStatus");
+  $("#chatName").textContent = nama;
+  let chatStarted = false;
+  const wait = ms => new Promise(r => setTimeout(r, ms));
+  async function runChat() {
+    if (chatStarted) return; chatStarted = true;
+    for (const m of C.chat || []) {
+      const side = m.dari === "kamu" ? "kamu" : "aku";
+      const typing = document.createElement("div");
+      typing.className = `bubble ${side}`;
+      typing.innerHTML = '<span class="typing-dots"><i></i><i></i><i></i></span>';
+      typing.style.padding = "0";
+      chatBody.appendChild(typing);
+      chatStatus.textContent = "sedang mengetik…";
+      await wait(700 + Math.min(m.teks.length * 25, 1200));
+      typing.remove();
+      const b = document.createElement("div");
+      b.className = `bubble ${side}`;
+      const p = document.createElement("div"); emojify(p, m.teks); b.appendChild(p);
+      const t = document.createElement("time");
+      t.textContent = new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }) + (side === "aku" ? " ✓✓" : "");
+      b.appendChild(t);
+      chatBody.appendChild(b);
+      chatStatus.textContent = "online";
+      await wait(450);
+    }
+    hearts(15);
+  }
+
+  /* =========================================================
+     10c. GAME — pecahkan balon
+     ========================================================= */
+  const gameBox = $("#gameBox"), goal = Math.max(C.balonTarget || 10, 1);
+  $("#gameTarget").textContent = goal; $("#gameTarget2").textContent = goal;
+  const FACES = ["🥳", "😍", "🥰", "🎉", "💖", "✨", "😘", "🤩"];
+  let popped = 0, spawner = 0;
+  function spawnGameBalloon() {
+    const b = document.createElement("button");
+    const c = BCOL[(Math.random() * BCOL.length) | 0];
+    b.className = "gballoon"; b.setAttribute("aria-label", "Balon");
+    b.style.left = rand(4, 86) + "%";
+    b.style.background = `radial-gradient(circle at 35% 30%, #fff9, ${c} 45%, ${c})`;
+    b.style.animationDuration = rand(4.5, 7.5) + "s";
+    b.style.setProperty("--sway", rand(-40, 40) + "px");
+    const face = document.createElement("span"); face.className = "face";
+    face.appendChild(emo(FACES[(Math.random() * FACES.length) | 0])); b.appendChild(face);
+    b.addEventListener("animationend", () => b.remove());
+    b.addEventListener("pointerdown", e => { e.preventDefault(); popBalloon(b, e); });
+    gameBox.appendChild(b);
+  }
+  function popBalloon(b, e) {
+    const box = gameBox.getBoundingClientRect(), r = b.getBoundingClientRect();
+    const fx = document.createElement("span"); fx.className = "pop-emo";
+    fx.style.left = r.left - box.left + r.width / 2 + "px"; fx.style.top = r.top - box.top + r.height / 2 + "px";
+    fx.appendChild(emo(["💥", "✨", "🎉"][(Math.random() * 3) | 0]));
+    fx.addEventListener("animationend", () => fx.remove());
+    gameBox.appendChild(fx);
+    explode(e.clientX, e.clientY, [b.style.background.match(/#[0-9a-f]{6}/i)?.[0] || "#f5d27a", "#fff"], 36);
+    popSound();
+    b.remove();
+    popped = Math.min(popped + 1, goal);
+    $("#gameCount").textContent = popped;
+    $("#gameBar").style.width = (popped / goal) * 100 + "%";
+    if (popped >= goal) winGame();
+  }
+  function winGame() {
+    clearInterval(spawner);
+    $$(".gballoon", gameBox).forEach(b => b.remove());
+    emojify($("#secretText"), C.pesanRahasia || "Kamu hebat! 🎉");
+    $("#gameSecret").classList.add("show");
+    confetti(200); show(8, 250); emojiRain(["🎁", "🎉", "🥳", "💖"], 40);
+  }
+  $("#gameStart").addEventListener("click", () => {
+    $("#gameStart").style.display = "none";
+    spawnGameBalloon();
+    spawner = setInterval(() => { if (!document.hidden) spawnGameBalloon(); }, 650);
+  });
+
+  /* =========================================================
+     10d. KUIS
+     ========================================================= */
+  const quiz = C.kuis || [];
+  let qi = 0, score = 0;
+  function renderQuiz() {
+    const opts = $("#quizOpts"), res = $("#quizResult");
+    res.textContent = ""; opts.textContent = "";
+    if (qi >= quiz.length) {
+      $("#quizStep").textContent = "HASIL";
+      const perfect = score === quiz.length;
+      emojify($("#quizQ"), `Skor kamu ${score} / ${quiz.length} ${perfect ? "🏆" : score ? "🥰" : "🙈"}`);
+      emojify(res, perfect ? "Sempurna! Kamu memang paling kenal kita 💖" : "Gapapa, yang penting aku tetap sayang kamu 😘");
+      const again = document.createElement("button");
+      again.className = "btn-ghost"; again.style.marginTop = "18px"; again.textContent = "↻ Ulangi Kuis";
+      again.onclick = () => { qi = 0; score = 0; renderQuiz(); };
+      opts.appendChild(again);
+      emojiRain(perfect ? ["🏆", "🥳", "🎉", "💖"] : ["🥰", "💕", "😘"], 36);
+      if (perfect) { confetti(200); show(6, 250); }
+      return;
+    }
+    const q = quiz[qi];
+    $("#quizStep").textContent = `PERTANYAAN ${qi + 1} / ${quiz.length}`;
+    emojify($("#quizQ"), q.tanya);
+    q.pilihan.forEach((txt, i) => {
+      const b = document.createElement("button");
+      const tag = document.createElement("b"); tag.textContent = "ABCD"[i] || i + 1;
+      const label = document.createElement("span"); emojify(label, txt);
+      b.append(tag, label);
+      b.onclick = () => {
+        const btns = $$("button", opts);
+        btns.forEach(x => (x.disabled = true));
+        btns[q.jawaban]?.classList.add("right");
+        if (i === q.jawaban) {
+          score++; emojify(res, "Benar! 🥳");
+          const r = b.getBoundingClientRect(); explode(r.left + r.width / 2, r.top + r.height / 2, ["#6bffb8", "#f5d27a", "#fff"], 50);
+        } else { b.classList.add("wrong"); emojify(res, "Yah salah 🙈"); }
+        setTimeout(() => { qi++; renderQuiz(); }, 1600);
+      };
+      opts.appendChild(b);
+    });
+  }
+  if (quiz.length) renderQuiz(); else $("#quiz").remove();
 
   /* =========================================================
      11. SCROLL REVEAL, PROGRESS, AUTO-FX PER SECTION
@@ -557,15 +766,26 @@
     entries.forEach(en => {
       if (!en.isIntersecting || fired.has(en.target.id)) return;
       fired.add(en.target.id);
-      if (en.target.id === "finale") { show(10, 300); confetti(150, true); }
+      if (en.target.id === "finale") { show(10, 300); confetti(150, true); emojiRain(); }
+      if (en.target.id === "chat") runChat();
       if (en.target.id === "reasons") hearts(20);
     });
   }, { threshold: .4 });
   $$(".section").forEach(s => secIO.observe(s));
 
+  const dockLinks = $$("#dock a");
+  const dockIO = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if (!en.isIntersecting) return;
+      dockLinks.forEach(a => a.classList.toggle("active", a.getAttribute("href") === "#" + en.target.id));
+    });
+  }, { rootMargin: "-45% 0px -45% 0px" });
+  $$(".section").forEach(s => dockIO.observe(s));
+
   const bar = $("#progress");
   window.addEventListener("scroll", () => {
     const h = document.documentElement.scrollHeight - innerHeight;
     bar.style.width = (h > 0 ? (scrollY / h) * 100 : 0) + "%";
+    $("#dock").classList.toggle("visible", scrollY > innerHeight * .6);
   }, { passive: true });
 })();

@@ -14,6 +14,14 @@ window.BIRTHDAY_CONFIG = {
   // Tanggal lahir (YYYY-MM-DD) — untuk menghitung hari yang sudah dilalui bersama dunia
   tanggalLahir: "2005-09-27",
 
+  // Tanggal & jam ulang tahun (YYYY-MM-DDTHH:MM). Jika masih di masa depan,
+  // halaman menampilkan hitung mundur dan kado baru bisa dibuka saat waktunya tiba.
+  // Kosongkan untuk langsung bisa dibuka. Tambahkan ?preview di URL untuk melewati hitung mundur.
+  tanggalUltah: "",
+
+  // Emoji animasi (Google Noto Animated Emoji). false = pakai emoji biasa.
+  emojiAnimasi: true,
+
   // Musik latar. Taruh file mp3 di assets/music/ lalu isi path-nya.
   // Kalau dikosongkan / file tidak ada, lagu "Happy Birthday" dimainkan otomatis (synth).
   musik: "",
@@ -46,11 +54,31 @@ window.BIRTHDAY_CONFIG = {
     youtube: "" // contoh: "dQw4w9WgXcQ" (jika diisi, src diabaikan)
   },
 
+  // Percakapan ala chat (muncul satu per satu seperti sedang mengetik)
+  chat: [
+    { dari: "aku", teks: "Hai sayang 👋" },
+    { dari: "aku", teks: "Tau gak hari ini hari apa? 🤔" },
+    { dari: "kamu", teks: "Hari apa emangnya? 🙈" },
+    { dari: "aku", teks: "Hari lahirnya orang paling spesial di hidupku 🥰" },
+    { dari: "aku", teks: "Aku udah siapin sesuatu buat kamu… scroll terus ya ✨" }
+  ],
+
+  // Game pecahkan balon: berapa balon yang harus dipecahkan untuk membuka pesan rahasia
+  balonTarget: 10,
+  pesanRahasia: "Kamu berhasil! 🎉 Hadiah rahasiamu: satu hari penuh jalan-jalan bareng aku, kamu yang pilih tempatnya 💖",
+
+  // Kuis kecil "Seberapa kenal kamu sama kita?" (jawaban = index pilihan yang benar, mulai 0)
+  kuis: [
+    { tanya: "Di mana kita pertama kali bertemu?", pilihan: ["Kampus", "Kafe", "Konser", "Online"], jawaban: 1 },
+    { tanya: "Makanan favorit kita berdua?", pilihan: ["Bakso", "Sushi", "Martabak", "Seblak"], jawaban: 2 },
+    { tanya: "Siapa yang lebih sayang?", pilihan: ["Kamu", "Aku", "Dua-duanya", "Aku lah pokoknya"], jawaban: 3 }
+  ],
+
   // Alasan-alasan (kartu flip)
   alasan: [
     { ikon: "✨", depan: "Senyummu", belakang: "Senyummu bisa mengubah hari terburukku jadi yang terbaik." },
     { ikon: "💖", depan: "Hatimu", belakang: "Hatimu yang tulus dan baik ke semua orang." },
-    { ikon: "🌙", depan: "Tawamu", belakang: "Tawamu adalah lagu favoritku yang tidak pernah bosan kudengar." },
+    { ikon: "😍", depan: "Tawamu", belakang: "Tawamu adalah lagu favoritku yang tidak pernah bosan kudengar." },
     { ikon: "🌹", depan: "Perhatianmu", belakang: "Caramu peduli pada hal-hal kecil yang sering aku lupakan." },
     { ikon: "👑", depan: "Kekuatanmu", belakang: "Kamu kuat, bahkan saat kamu merasa tidak." },
     { ikon: "🦋", depan: "Dirimu", belakang: "Karena kamu adalah kamu — dan itu sudah lebih dari cukup." }
