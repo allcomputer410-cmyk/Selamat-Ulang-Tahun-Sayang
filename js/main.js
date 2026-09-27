@@ -906,13 +906,20 @@
     iputSound.hidden = true;
   });
   if ($("#iput")) {
+    // pantau bingkai videonya (bukan seluruh bagian yang bisa lebih tinggi dari layar HP)
     new IntersectionObserver(entries => {
       entries.forEach(en => {
         if (!iputVideo) return;
-        if (en.isIntersecting) autoPlayIput();
-        else if (!iputVideo.paused) iputVideo.pause();
+        if (en.intersectionRatio >= .35) autoPlayIput();
+        else if (en.intersectionRatio < .1 && !iputVideo.paused) iputVideo.pause();
       });
-    }, { threshold: .55 }).observe($("#iput"));
+    }, { threshold: [0, .1, .35, .6] }).observe($("#iput .video-frame"));
+    // cadangan: ketuk di mana saja pada bagian ini → putar dengan suara
+    $("#iput").addEventListener("click", e => {
+      if (!iputVideo || e.target === iputVideo) return;
+      iputVideo.muted = false; iputVideo.removeAttribute("muted");
+      iputVideo.play().then(() => (iputSound.hidden = true)).catch(() => {});
+    });
   }
 
   /* =========================================================

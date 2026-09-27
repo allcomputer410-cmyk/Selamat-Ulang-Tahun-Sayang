@@ -826,3 +826,7 @@ span.emo, i.emo { width: auto; height: auto; }
 .video-corner { display: none; }
 .now-clock { position: relative; margin-top: -18px; font-size: .8rem; letter-spacing: .08em; color: var(--muted); font-variant-numeric: tabular-nums; }
 .now-clock:empty { display: none; }
+
+/* Bingkai video Iput lebih kecil agar tajam (video asli 576px) & muat di layar HP */
+#iput .video-frame.portrait { width: min(300px, 70vw); aspect-ratio: 9 / 16; }
+#iput { padding-top: 80px; padding-bottom: 120px; }
