@@ -36,7 +36,12 @@ window.BIRTHDAY_CONFIG = {
     { src: "assets/photos/1.jpg", caption: "Kelas IX-2, masa MTsN 🌹" },
     { src: "assets/photos/2.jpg", caption: "Malam yang hangat" },
     { src: "assets/photos/3.jpg", caption: "Petualangan kita" },
-    { src: "assets/photos/4.jpg", caption: "Kita sekarang ✨" }
+    { src: "assets/photos/4.jpg", caption: "Kita sekarang ✨" },
+    { src: "assets/photos/5.jpg", caption: "Senyum di balik cahaya" },
+    { src: "assets/photos/6.jpg", caption: "Dua sisi, satu cerita" },
+    { src: "assets/photos/7.jpg", caption: "Steady as it goes 🤍" },
+    { src: "assets/photos/8.jpg", caption: "Momen santai bareng" },
+    { src: "assets/photos/9.jpg", caption: "Selalu cantik 💖" }
   ],
 
   // Timeline kenangan (foto opsional)
