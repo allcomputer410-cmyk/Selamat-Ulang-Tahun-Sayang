@@ -33,14 +33,10 @@ window.BIRTHDAY_CONFIG = {
   // Foto galeri 3D. Taruh file di assets/photos/ lalu tulis nama file-nya.
   // Jika file tidak ditemukan, kartu akan menampilkan placeholder elegan.
   foto: [
-    { src: "assets/photos/1.jpg", caption: "Senyum yang selalu aku ingat" },
-    { src: "assets/photos/2.jpg", caption: "Kenangan masa MTsN" },
-    { src: "assets/photos/3.jpg", caption: "Cerita kita dulu" },
-    { src: "assets/photos/4.jpg", caption: "Tawa yang tak terlupa" },
-    { src: "assets/photos/5.jpg", caption: "Momen sederhana" },
-    { src: "assets/photos/6.jpg", caption: "Selalu cantik" },
-    { src: "assets/photos/7.jpg", caption: "Hari-hari yang berharga" },
-    { src: "assets/photos/8.jpg", caption: "Selamat ulang tahun ke-24 ✨" }
+    { src: "assets/photos/1.jpg", caption: "Kelas IX-2, masa MTsN 🌹" },
+    { src: "assets/photos/2.jpg", caption: "Malam yang hangat" },
+    { src: "assets/photos/3.jpg", caption: "Petualangan kita" },
+    { src: "assets/photos/4.jpg", caption: "Kita sekarang ✨" }
   ],
 
   // Timeline kenangan (foto opsional)
