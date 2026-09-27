@@ -87,9 +87,12 @@ window.BIRTHDAY_CONFIG = {
 
   // Game pecahkan balon: berapa balon yang harus dipecahkan untuk membuka pesan rahasia
   balonTarget: 10,
-  pesanRahasia: "Kamu berhasil! 🎉 Hadiahnya: ucapan spesial dari Iput 🎁💖",
-  // Video hadiah yang muncul setelah game balon selesai (kosongkan jika tidak ada)
+  pesanRahasia: "Kamu berhasil! 🎉 Satu langkah lagi: jawab kuis di bawah dengan benar untuk membuka ucapan spesial dari Iput 🎁💖",
+
+  // Video hadiah dari Iput: punya bagian sendiri setelah kuis, TERKUNCI sampai game balon selesai
+  // dan semua jawaban kuis benar, lalu otomatis diputar saat digulir ke bagiannya.
   videoRahasia: "assets/videos/iput.mp4",
+  posterRahasia: "",
 
   // Kuis kecil (jawaban = index pilihan yang benar, mulai 0 → A=0, B=1, C=2, D=3)
   judulKuis: "Seberapa Kenal Kamu Sama Aku?",

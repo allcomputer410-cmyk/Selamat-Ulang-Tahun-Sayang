@@ -151,7 +151,6 @@
         <div class="game-secret" id="gameSecret">
           <div class="title-emo" data-emo="🎁"></div>
           <p id="secretText"></p>
-          <div class="secret-video" id="secretVideo"></div>
         </div>
       </div>
     </section>
@@ -167,6 +166,27 @@
         <div class="quiz-opts" id="quizOpts"></div>
         <div class="quiz-result" id="quizResult"></div>
       </div>
+      <div class="lock-note" id="lockNote" data-reveal>
+        <div class="lock-ic" id="lockIc">🔒</div>
+        <p class="lock-title" id="lockTitle">Bagian selanjutnya masih terkunci</p>
+        <ul>
+          <li id="lkGame"><span class="ck">○</span> Selesaikan game pecahkan balon</li>
+          <li id="lkQuiz"><span class="ck">○</span> Jawab semua kuis dengan benar</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- HADIAH: VIDEO DARI IPUT (terbuka setelah game & kuis selesai) -->
+    <section id="iput" class="section">
+      <div class="title-emo" data-emo="🎁" data-reveal></div>
+      <h2 class="section-title" data-reveal id="iputTitle">Ucapan Spesial dari Iput</h2>
+      <p class="section-sub" data-reveal id="iputSub">Hadiah karena kamu berhasil menyelesaikan semua tantangan 💖</p>
+      <div class="video-frame portrait" data-reveal>
+        <div class="video-corner tl"></div><div class="video-corner tr"></div>
+        <div class="video-corner bl"></div><div class="video-corner br"></div>
+        <div class="video-inner" id="iputInner"></div>
+      </div>
+      <button class="btn-gold sound-btn" id="iputSound" hidden><span>🔊 Ketuk untuk nyalakan suara</span></button>
     </section>
 
     <!-- VIDEO -->

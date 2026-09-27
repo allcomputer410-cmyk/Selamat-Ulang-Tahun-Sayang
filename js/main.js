@@ -756,16 +756,8 @@
     $$(".gballoon", gameBox).forEach(b => b.remove());
     emojify($("#secretText"), C.pesanRahasia || "Kamu hebat! 🎉");
     $("#gameSecret").classList.add("show");
-    if (C.videoRahasia && !$("#secretVideo video")) {
-      const sv = document.createElement("video");
-      sv.controls = true; sv.playsInline = true; sv.preload = "metadata";
-      sv.onerror = () => sv.remove();
-      const ss = document.createElement("source"); ss.src = src(C.videoRahasia); ss.onerror = () => sv.remove();
-      sv.appendChild(ss);
-      sv.addEventListener("play", () => { if (Music.playing) { Music.stop(); musicBtn.classList.add("paused"); } });
-      $("#secretVideo").appendChild(sv);
-    }
     confetti(200); show(8, 250); emojiRain(["🎁", "🎉", "🥳", "💖"], 40);
+    progress.game = true; updateLock();
   }
   $("#gameStart").addEventListener("click", () => {
     $("#gameStart").style.display = "none";
@@ -777,23 +769,20 @@
      10d. KUIS
      ========================================================= */
   const quiz = C.kuis || [];
+  const progress = { game: false, quiz: !quiz.length };
   if (C.judulKuis) $("#quizTitle").textContent = C.judulKuis;
   if (C.judulAlasan) $("#reasonsTitle").textContent = C.judulAlasan;
-  let qi = 0, score = 0;
+  let qi = 0, wrongs = 0;
   function renderQuiz() {
     const opts = $("#quizOpts"), res = $("#quizResult");
     res.textContent = ""; opts.textContent = "";
     if (qi >= quiz.length) {
       $("#quizStep").textContent = "HASIL";
-      const perfect = score === quiz.length;
-      emojify($("#quizQ"), `Skor kamu ${score} / ${quiz.length} ${perfect ? "🏆" : score ? "🥰" : "🙈"}`);
-      emojify(res, perfect ? "Sempurna! Kamu memang paling kenal kita 💖" : "Gapapa, yang penting aku tetap sayang kamu 😘");
-      const again = document.createElement("button");
-      again.className = "btn-ghost"; again.style.marginTop = "18px"; again.textContent = "↻ Ulangi Kuis";
-      again.onclick = () => { qi = 0; score = 0; renderQuiz(); };
-      opts.appendChild(again);
-      emojiRain(perfect ? ["🏆", "🥳", "🎉", "💖"] : ["🥰", "💕", "😘"], 36);
-      if (perfect) { confetti(200); show(6, 250); }
+      emojify($("#quizQ"), `Semua jawaban benar! 🏆`);
+      emojify(res, wrongs ? `Sempat salah ${wrongs}x, tapi akhirnya benar semua 🥰` : "Sempurna tanpa salah! Kamu memang paling kenal aku 💖");
+      emojiRain(["🏆", "🥳", "🎉", "💖"], 36);
+      confetti(200); show(6, 250);
+      progress.quiz = true; updateLock();
       return;
     }
     const q = quiz[qi];
@@ -807,17 +796,115 @@
       b.onclick = () => {
         const btns = $$("button", opts);
         btns.forEach(x => (x.disabled = true));
-        btns[q.jawaban]?.classList.add("right");
         if (i === q.jawaban) {
-          score++; emojify(res, "Benar! 🥳");
+          b.classList.add("right");
+          emojify(res, "Benar! 🥳");
           const r = b.getBoundingClientRect(); explode(r.left + r.width / 2, r.top + r.height / 2, ["#6bffb8", "#f5d27a", "#fff"], 50);
-        } else { b.classList.add("wrong"); emojify(res, "Yah salah 🙈"); }
-        setTimeout(() => { qi++; renderQuiz(); }, 1600);
+          setTimeout(() => { qi++; renderQuiz(); }, 1300);
+        } else {
+          // salah → harus coba lagi pertanyaan yang sama (jawaban benar tidak dibocorkan)
+          wrongs++;
+          b.classList.add("wrong");
+          emojify(res, "Yah salah 🙈 Coba lagi ya!");
+          setTimeout(() => { btns.forEach(x => { if (x !== b) x.disabled = false; }); res.textContent = ""; }, 1200);
+        }
       };
       opts.appendChild(b);
     });
   }
   if (quiz.length) renderQuiz(); else $("#quiz").remove();
+
+  /* =========================================================
+     10d-2. KUNCI — bagian setelah kuis tersembunyi sampai game
+     balon selesai DAN semua jawaban kuis benar
+     ========================================================= */
+  const LOCK_KEY = "bday-unlocked";
+  const lockAnchor = $("#quiz") || $("#game");
+  const lockedSections = [];
+  for (let el = lockAnchor && lockAnchor.nextElementSibling; el; el = el.nextElementSibling) {
+    if (el.classList.contains("section")) { el.classList.add("is-locked"); lockedSections.push(el); }
+  }
+  let unlocked = false;
+  function markDone(id) { const li = $(id); if (li) { li.classList.add("done"); $(".ck", li).textContent = "✓"; } }
+  function unlock(celebrate) {
+    if (unlocked) return; unlocked = true;
+    lockedSections.forEach(el => el.classList.remove("is-locked"));
+    markDone("#lkGame"); markDone("#lkQuiz");
+    $("#lockNote").classList.add("open");
+    $("#lockIc").textContent = "🔓";
+    emojify($("#lockTitle"), "Terbuka! Ada hadiah spesial untukmu di bawah 🎁");
+    try { localStorage.setItem(LOCK_KEY, "1"); } catch (e) { /* abaikan */ }
+    if (celebrate) {
+      emojiRain(["🎁", "🔓", "🥳", "💖"], 40); confetti(160);
+      setTimeout(() => $("#iput")?.scrollIntoView({ behavior: "smooth" }), 2200);
+    }
+  }
+  function updateLock() {
+    if (progress.game) markDone("#lkGame");
+    if (progress.quiz) markDone("#lkQuiz");
+    if (progress.game && progress.quiz) unlock(true);
+    else if (progress.quiz && !progress.game) emojify($("#quizResult"), "Tinggal selesaikan game balon di atas ya 🎈");
+  }
+  // sudah pernah terbuka di perangkat ini → tidak perlu main ulang
+  try { if (localStorage.getItem(LOCK_KEY) === "1") unlock(false); } catch (e) { /* abaikan */ }
+  // link dock ke bagian yang masih terkunci → arahkan ke catatan kunci
+  document.addEventListener("click", e => {
+    const a = e.target.closest('a[href^="#"]');
+    if (!a) return;
+    const t = document.querySelector(a.getAttribute("href"));
+    if (t && t.classList.contains("is-locked")) {
+      e.preventDefault();
+      const note = $("#lockNote");
+      note.scrollIntoView({ behavior: "smooth", block: "center" });
+      note.classList.remove("shake"); void note.offsetWidth; note.classList.add("shake");
+    }
+  }, true);
+
+  /* =========================================================
+     10d-3. VIDEO DARI IPUT — otomatis diputar saat terlihat
+     ========================================================= */
+  const iputInner = $("#iputInner"), iputSound = $("#iputSound");
+  let iputVideo = null;
+  if (C.videoRahasia) {
+    const v = document.createElement("video");
+    v.playsInline = true; v.controls = true; v.preload = "metadata";
+    v.setAttribute("playsinline", "");
+    if (C.posterRahasia) v.poster = src(C.posterRahasia);
+    const fail = () => {
+      iputVideo = null; iputSound.hidden = true;
+      iputInner.innerHTML = '<div class="video-empty"><div class="play">🎁</div><p>Video dari Iput segera hadir 💖</p></div>';
+    };
+    v.onerror = fail;
+    const s0 = document.createElement("source"); s0.src = src(C.videoRahasia); s0.onerror = fail;
+    v.appendChild(s0);
+    v.addEventListener("play", () => { if (Music.playing) { Music.stop(); musicBtn.classList.add("paused"); } });
+    v.addEventListener("ended", () => { Music.resume(); musicBtn.classList.remove("paused"); });
+    iputInner.appendChild(v);
+    iputVideo = v;
+  } else $("#iput").remove();
+
+  async function autoPlayIput() {
+    const v = iputVideo; if (!v || !unlocked) return;
+    try { v.muted = false; await v.play(); iputSound.hidden = true; }
+    catch (e) {
+      // browser menolak autoplay bersuara → putar tanpa suara & tawarkan tombol suara
+      try { v.muted = true; await v.play(); iputSound.hidden = false; } catch (e2) { /* tunggu diketuk */ }
+    }
+  }
+  iputSound.addEventListener("click", () => {
+    if (!iputVideo) return;
+    iputVideo.muted = false; iputVideo.play().catch(() => {});
+    iputSound.hidden = true;
+  });
+  if ($("#iput")) {
+    new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if (!iputVideo) return;
+        if (en.isIntersecting) autoPlayIput();
+        else if (!iputVideo.paused) iputVideo.pause();
+      });
+    }, { threshold: .55 }).observe($("#iput"));
+  }
 
   /* =========================================================
      10e. TEMAN KUCING — ketuk untuk ganti pose & dapat pesan
