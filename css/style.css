@@ -762,3 +762,32 @@ span.emo, i.emo { width: auto; height: auto; }
   .buddy-bubble { left: 50px; font-size: .7rem; white-space: normal; width: max-content; max-width: calc(100vw - 80px); }
   .gate-sticker { width: 90px; right: -24px; }
 }
+
+/* Pose: kue (bawa kue ulang tahun) */
+.pose-kue .cs-a, .pose-kue .cs-cake { animation: csBounce 1.1s ease-in-out infinite; }
+.pose-kue .cs-b { animation: csCheer 1.1s ease-in-out infinite; }
+@keyframes csCheer { 0%, 100% { transform: rotate(2deg); } 50% { transform: translateY(-7px) rotate(-3deg); } }
+.pose-kue .cs-paw-b { transform-origin: center; animation: csClap .28s ease-in-out infinite alternate; }
+@keyframes csClap { from { transform: translate(-4px, -22px) rotate(-12deg); } to { transform: translate(2px, -28px) rotate(12deg); } }
+.pose-kue .cs-paw-a { display: none; }
+.cs-flame { transform-origin: 50% 100%; animation: flicker .14s ease-in-out infinite alternate; }
+.cs-glow { transform-origin: center; animation: csGlow 1s ease-in-out infinite alternate; }
+@keyframes csGlow { to { transform: scale(1.35); opacity: .6; } }
+.pose-kue .cs-heart { animation: csHeartFloat 2.6s ease-in infinite; }
+.pose-kue .cs-heart.h2 { animation-delay: .9s; } .pose-kue .cs-heart.h3 { animation-delay: 1.8s; }
+
+/* Stiker di samping kue */
+.cake-stage { position: relative; }
+.cake-sticker { position: absolute; right: -170px; bottom: 10px; width: 170px; z-index: 2; }
+
+/* Video tegak */
+.video-frame.portrait { width: min(380px, 88vw); aspect-ratio: 9 / 16; }
+.video-inner video { object-fit: contain; background: #000; }
+
+/* Video hadiah game balon */
+.game-secret { overflow-y: auto; }
+.secret-video video { width: min(220px, 60vw); max-height: 270px; margin-top: 14px; border-radius: 14px; border: 2px solid var(--gold-3); background: #000; }
+@media (max-width: 720px) {
+  .cake-sticker { right: -12px; top: -10px; bottom: auto; width: 100px; }
+  .game-box { height: 480px; }
+}

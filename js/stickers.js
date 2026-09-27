@@ -4,6 +4,7 @@
    Pose:  "cium"  — si putih mencium pipi si oren, hati muncul
           "peluk" — berpelukan sambil bergoyang, hati melayang
           "lambai"— si oren melambai, si putih mengintip malu-malu
+          "kue"   — si oren membawa kue ulang tahun berlilin, si putih bertepuk tangan
    Pemakaian: el.innerHTML = catSticker("cium");
    ========================================================= */
 (function () {
@@ -21,17 +22,22 @@
     `<g transform="translate(${x} ${y}) scale(${s})"><path class="${cls}" d="M0 4C0-2 8-4 10 2c2-6 10-4 10 2 0 6-10 12-10 12S0 10 0 4z" fill="${HATI}"/></g>`;
 
   function catSticker(pose = "cium") {
-    const eyesB = pose === "peluk"
+    const happy = pose === "peluk" || pose === "kue";
+    const eyesB = happy
       // mata bahagia (tertutup)
       ? `<path d="M137 114q5-6 10 0M160 112q5-6 10 0" fill="none" stroke="${INK}" stroke-width="3.2" stroke-linecap="round"/>`
       : pose === "lambai"
         ? `<g class="cs-blink"><ellipse cx="142" cy="113" rx="4" ry="5" fill="${INK}"/><ellipse cx="165" cy="111" rx="4" ry="5" fill="${INK}"/><circle cx="143.5" cy="111" r="1.4" fill="#fff"/><circle cx="166.5" cy="109" r="1.4" fill="#fff"/></g>`
         // mata terpejam saat mencium
         : `<path d="M135 113q5 4 10 0M158 111q5 4 10 0" fill="none" stroke="${INK}" stroke-width="3.2" stroke-linecap="round"/>`;
-    const mouthB = pose === "cium"
+    const mouthB = pose === "kue"
+      ? `<path d="M149 122q5 9 10 0z" fill="${PIPI}" stroke="${INK}" stroke-width="2.6" stroke-linejoin="round"/>`
+      : pose === "cium"
       ? `<path d="M121 122q-6 2 0 5q-6 2 0 5" fill="none" stroke="${INK}" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>`
       : `<path d="M148 124q3 4 6 0q3 4 6 0" fill="none" stroke="${INK}" stroke-width="2.6" stroke-linecap="round"/>`;
-    const mouthA = pose === "cium"
+    const mouthA = pose === "kue"
+      ? `<path d="M80 97q6 11 12 0z" fill="${PIPI}" stroke="${INK}" stroke-width="2.8" stroke-linejoin="round"/>`
+      : pose === "cium"
       ? `<path class="cs-mouth-o" d="M83 99q4 7 8 0z" fill="${PIPI}" stroke="${INK}" stroke-width="2.6" stroke-linejoin="round"/>`
       : `<path d="M79 97q4 5 8 0q4 5 8 0" fill="none" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>`;
 
@@ -76,6 +82,21 @@
     ${mouthB}
     <g class="cs-paw-b"><ellipse cx="124" cy="152" rx="11" ry="9" fill="${PUTIH}" stroke="${INK}" stroke-width="3.5"/></g>
   </g>
+  ${pose === "kue" ? `<!-- Kue ulang tahun dibawa si oren -->
+  <g class="cs-cake">
+    <ellipse cx="86" cy="176" rx="44" ry="7" fill="#f5d27a" stroke="${INK}" stroke-width="3"/>
+    <rect x="56" y="140" width="60" height="34" rx="7" fill="#ffd9e1" stroke="${INK}" stroke-width="3.5"/>
+    <path d="M56 150h60v-4q0-6-6-6H62q-6 0-6 6z" fill="#fffaf5"/>
+    <path d="M58 150q4 7 8 0q4 8 8 0q4 7 8 0q4 8 8 0q4 7 8 0q4 8 8 0q3 6 6 0" fill="#fffaf5" stroke="${INK}" stroke-width="2.4" stroke-linejoin="round"/>
+    <rect x="56" y="140" width="60" height="34" rx="7" fill="none" stroke="${INK}" stroke-width="3.5"/>
+    <circle cx="70" cy="163" r="3" fill="${HATI}"/><circle cx="86" cy="165" r="3" fill="#7b4dff"/><circle cx="102" cy="163" r="3" fill="${HATI}"/>
+    <rect x="83" y="118" width="6" height="22" rx="2" fill="#fff" stroke="${INK}" stroke-width="2.4"/>
+    <path d="M83 124l6-4M83 131l6-4" stroke="${HATI}" stroke-width="2.2"/>
+    <path class="cs-flame" d="M86 102q7 8 0 14q-7-6 0-14z" fill="#ffb02e" stroke="#ff7a1a" stroke-width="1.5"/>
+    <ellipse class="cs-glow" cx="86" cy="110" rx="12" ry="12" fill="rgba(255,200,80,.35)"/>
+    <ellipse cx="52" cy="160" rx="10" ry="9" fill="${OREN}" stroke="${INK}" stroke-width="3.2"/>
+    <ellipse cx="120" cy="160" rx="10" ry="9" fill="${OREN}" stroke="${INK}" stroke-width="3.2"/>
+  </g>` : ""}
   <!-- Hati -->
   ${heart(112, 52, 1.1, "cs-heart h1")}
   ${heart(150, 36, .8, "cs-heart h2")}

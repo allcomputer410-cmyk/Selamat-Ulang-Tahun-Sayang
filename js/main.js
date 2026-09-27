@@ -348,7 +348,7 @@
     const hues = [[330, 270], [280, 220], [20, 330], [45, 10], [200, 280], [300, 20]];
     const [a, b] = hues[i % hues.length];
     return `<div class="placeholder" style="background:linear-gradient(135deg,hsl(${a} 60% 30%),hsl(${b} 55% 14%))">
-      <b>${i + 1}</b><span>${label || "Foto"}</span><small>tambahkan foto di assets/photos</small></div>`;
+      <b>${i + 1}</b><span>${label || "Foto"}</span></div>`;
   }
   function imgWithFallback(src, alt, i) {
     const img = new Image();
@@ -385,6 +385,7 @@
 
   // Video
   const vi = $("#videoInner"), V = C.video || {};
+  if (V.tegak && !V.youtube) $(".video-frame").classList.add("portrait");
   const videoEmpty = () => {
     vi.innerHTML = `<div class="video-empty"><div class="play">▶</div><p>Taruh videomu di <code>${V.src || "assets/videos/video.mp4"}</code></p><p>atau isi <code>video.youtube</code> di js/config.js</p></div>`;
   };
@@ -397,6 +398,10 @@
     v.controls = true; v.playsInline = true; v.preload = "metadata";
     if (V.poster) v.poster = src(V.poster);
     v.onerror = videoEmpty;
+    // video tegak (dari HP) → bingkai tegak agar tidak terpotong
+    v.addEventListener("loadedmetadata", () => {
+      if (v.videoHeight > v.videoWidth) $(".video-frame").classList.add("portrait");
+    });
     const s = document.createElement("source"); s.src = src(V.src); s.onerror = videoEmpty; v.appendChild(s);
     // saat video diputar, kecilkan musik latar
     v.addEventListener("play", () => { if (Music.playing) { Music.stop(); musicBtn.classList.add("paused"); } });
@@ -751,6 +756,15 @@
     $$(".gballoon", gameBox).forEach(b => b.remove());
     emojify($("#secretText"), C.pesanRahasia || "Kamu hebat! 🎉");
     $("#gameSecret").classList.add("show");
+    if (C.videoRahasia && !$("#secretVideo video")) {
+      const sv = document.createElement("video");
+      sv.controls = true; sv.playsInline = true; sv.preload = "metadata";
+      sv.onerror = () => sv.remove();
+      const ss = document.createElement("source"); ss.src = src(C.videoRahasia); ss.onerror = () => sv.remove();
+      sv.appendChild(ss);
+      sv.addEventListener("play", () => { if (Music.playing) { Music.stop(); musicBtn.classList.add("paused"); } });
+      $("#secretVideo").appendChild(sv);
+    }
     confetti(200); show(8, 250); emojiRain(["🎁", "🎉", "🥳", "💖"], 40);
   }
   $("#gameStart").addEventListener("click", () => {
@@ -763,6 +777,8 @@
      10d. KUIS
      ========================================================= */
   const quiz = C.kuis || [];
+  if (C.judulKuis) $("#quizTitle").textContent = C.judulKuis;
+  if (C.judulAlasan) $("#reasonsTitle").textContent = C.judulAlasan;
   let qi = 0, score = 0;
   function renderQuiz() {
     const opts = $("#quizOpts"), res = $("#quizResult");
@@ -807,7 +823,7 @@
      10e. TEMAN KUCING — ketuk untuk ganti pose & dapat pesan
      ========================================================= */
   const buddy = $("#buddy"), buddyBubble = $("#buddyBubble");
-  const POSES = ["lambai", "cium", "peluk"];
+  const POSES = ["lambai", "cium", "kue", "peluk"];
   const KATA = C.kataTeman && C.kataTeman.length ? C.kataTeman : ["Selamat ulang tahun! 🎂"];
   let pose = 0, kata = 0, bubbleT;
   buddy.addEventListener("click", () => {

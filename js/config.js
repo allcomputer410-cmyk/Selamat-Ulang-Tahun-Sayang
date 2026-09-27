@@ -1,23 +1,24 @@
 /* =========================================================
    KONFIGURASI — ubah isi file ini saja untuk personalisasi
+   (atau pakai editor.html untuk mengisinya tanpa coding)
    ========================================================= */
 window.BIRTHDAY_CONFIG = {
   // Nama orang yang berulang tahun
-  nama: "Sayang",
+  nama: "Sayangku",
 
   // Nama pengirim (kamu)
-  dari: "Aku",
+  dari: "Alwin",
 
   // Umur baru (dipakai untuk jumlah lilin & angka di hero)
-  umur: 21,
+  umur: 24,
 
   // Tanggal lahir (YYYY-MM-DD) — untuk menghitung hari yang sudah dilalui bersama dunia
-  tanggalLahir: "2005-09-27",
+  tanggalLahir: "2002-09-28",
 
-  // Tanggal & jam ulang tahun (YYYY-MM-DDTHH:MM). Jika masih di masa depan,
-  // halaman menampilkan hitung mundur dan kado baru bisa dibuka saat waktunya tiba.
+  // Tanggal & jam ulang tahun (YYYY-MM-DDTHH:MM, mengikuti jam di HP/laptop yang membuka).
+  // Jika masih di masa depan, halaman menampilkan hitung mundur dan kado baru bisa dibuka saat waktunya tiba.
   // Kosongkan untuk langsung bisa dibuka. Tambahkan ?preview di URL untuk melewati hitung mundur.
-  tanggalUltah: "",
+  tanggalUltah: "2026-09-28T00:00",
 
   // Emoji animasi (Google Noto Animated Emoji). false = pakai emoji biasa.
   // Emoji diambil dari assets/emoji/ (jalankan tools/emoji.py setelah menambah emoji baru);
@@ -32,28 +33,30 @@ window.BIRTHDAY_CONFIG = {
   // Foto galeri 3D. Taruh file di assets/photos/ lalu tulis nama file-nya.
   // Jika file tidak ditemukan, kartu akan menampilkan placeholder elegan.
   foto: [
-    { src: "assets/photos/1.jpg", caption: "Senyum favoritku" },
-    { src: "assets/photos/2.jpg", caption: "Hari pertama kita" },
-    { src: "assets/photos/3.jpg", caption: "Jalan-jalan sore" },
+    { src: "assets/photos/1.jpg", caption: "Senyum yang selalu aku ingat" },
+    { src: "assets/photos/2.jpg", caption: "Kenangan masa MTsN" },
+    { src: "assets/photos/3.jpg", caption: "Cerita kita dulu" },
     { src: "assets/photos/4.jpg", caption: "Tawa yang tak terlupa" },
-    { src: "assets/photos/5.jpg", caption: "Petualangan kecil" },
-    { src: "assets/photos/6.jpg", caption: "Kamu & senja" },
-    { src: "assets/photos/7.jpg", caption: "Momen random" },
-    { src: "assets/photos/8.jpg", caption: "Selalu cantik" }
+    { src: "assets/photos/5.jpg", caption: "Momen sederhana" },
+    { src: "assets/photos/6.jpg", caption: "Selalu cantik" },
+    { src: "assets/photos/7.jpg", caption: "Hari-hari yang berharga" },
+    { src: "assets/photos/8.jpg", caption: "Selamat ulang tahun ke-24 ✨" }
   ],
 
   // Timeline kenangan (foto opsional)
   kenangan: [
-    { tanggal: "Awal Cerita", judul: "Pertama Bertemu", teks: "Hari di mana semesta mempertemukan kita, dan semuanya mulai terasa berbeda.", foto: "assets/photos/1.jpg" },
-    { tanggal: "Chapter 2", judul: "Kencan Pertama", teks: "Gugup, canggung, tapi jadi salah satu hari paling indah dalam hidupku.", foto: "assets/photos/2.jpg" },
-    { tanggal: "Chapter 3", judul: "Petualangan Bersama", teks: "Setiap perjalanan jadi lebih seru karena ada kamu di sampingku.", foto: "assets/photos/3.jpg" },
-    { tanggal: "Hari Ini", judul: "Ulang Tahunmu", teks: "Dan hari ini aku ingin merayakan kamu — orang paling berharga buatku.", foto: "assets/photos/4.jpg" }
+    { tanggal: "Masa MTsN", judul: "Pertama Bertemu", teks: "Semua berawal di MTsN. Siapa sangka pertemuan sederhana di sekolah itu jadi salah satu cerita paling berharga dalam hidupku.", foto: "assets/photos/1.jpg" },
+    { tanggal: "Cerita Kita", judul: "Kita Pernah Bersama", teks: "Kita pernah saling menjaga, berbagi cerita, tawa, dan juga air mata. Masa-masa itu selalu aku simpan baik-baik.", foto: "assets/photos/2.jpg" },
+    { tanggal: "Sebuah Pelajaran", judul: "Jalan yang Berbeda", teks: "Kita sempat berpisah, dan aku sadar banyak salah yang pernah aku buat. Dari situ aku belajar untuk jadi orang yang lebih baik.", foto: "assets/photos/3.jpg" },
+    { tanggal: "28 September", judul: "Ulang Tahunmu yang ke-24", teks: "Hari ini aku cuma ingin bilang tiga hal: maaf, terima kasih, dan selamat ulang tahun. Semoga bahagia selalu menemanimu.", foto: "assets/photos/4.jpg" }
   ],
 
-  // Video. Taruh file mp4 di assets/videos/ ATAU isi youtube dengan ID video YouTube.
+  // Video. Taruh file mp4 di assets/videos/ ATAU isi youtube dengan ID/link video YouTube.
+  // Video tegak (dari HP) otomatis ditampilkan dengan bingkai tegak.
   video: {
     src: "assets/videos/video.mp4",
-    poster: "assets/photos/5.jpg",
+    poster: "assets/photos/video-poster.jpg",
+    tegak: true, // video potret dari HP (terdeteksi otomatis juga)
     youtube: "" // ID atau link YouTube, contoh: "https://youtu.be/dQw4w9WgXcQ" (jika diisi, src diabaikan)
   },
 
@@ -62,55 +65,65 @@ window.BIRTHDAY_CONFIG = {
   stiker: {
     gerbang: "",  // di samping kado pembuka
     chat: "",     // stiker terakhir di percakapan
+    kue: "",      // di samping kue ulang tahun
     surat: "",    // di bawah surat
     penutup: "",  // di atas tulisan Happy Birthday
     teman: ""     // teman kecil di pojok kiri bawah (bisa diketuk)
   },
 
   // Kalimat si teman kucing saat diketuk
-  kataTeman: ["Selamat ulang tahun! 🎂", "Kamu lucu banget 🥰", "Peluk dulu sini 🤗", "Jangan lupa bahagia ya ✨", "Muach! 😘"],
+  kataTeman: ["Selamat ulang tahun ke-24! 🎂", "Maafin Alwin ya 🥺", "Makasih buat semuanya 💖", "Semoga bahagia selalu ✨", "Barakallah fii umrik 🙏"],
 
   // Percakapan ala chat (muncul satu per satu seperti sedang mengetik)
   chat: [
-    { dari: "aku", teks: "Hai sayang 👋" },
-    { dari: "aku", teks: "Tau gak hari ini hari apa? 🤔" },
+    { dari: "aku", teks: "Hai Sayangku 👋" },
+    { dari: "aku", teks: "Udah jam 12 nih… tau gak hari ini hari apa? 🤔" },
     { dari: "kamu", teks: "Hari apa emangnya? 🙈" },
-    { dari: "aku", teks: "Hari lahirnya orang paling spesial di hidupku 🥰" },
-    { dari: "aku", teks: "Aku udah siapin sesuatu buat kamu… scroll terus ya ✨" }
+    { dari: "aku", teks: "Hari lahirnya orang yang selalu punya tempat spesial di hatiku 🥰" },
+    { dari: "aku", teks: "Selamat ulang tahun yang ke-24 ya 🎂" },
+    { dari: "aku", teks: "Aku udah siapin sesuatu buat kamu… scroll pelan-pelan ya ✨" }
   ],
 
   // Game pecahkan balon: berapa balon yang harus dipecahkan untuk membuka pesan rahasia
   balonTarget: 10,
-  pesanRahasia: "Kamu berhasil! 🎉 Hadiah rahasiamu: satu hari penuh jalan-jalan bareng aku, kamu yang pilih tempatnya 💖",
+  pesanRahasia: "Kamu berhasil! 🎉 Hadiahnya: ucapan spesial dari Iput 🎁💖",
+  // Video hadiah yang muncul setelah game balon selesai (kosongkan jika tidak ada)
+  videoRahasia: "assets/videos/iput.mp4",
 
-  // Kuis kecil "Seberapa kenal kamu sama kita?" (jawaban = index pilihan yang benar, mulai 0)
+  // Kuis kecil (jawaban = index pilihan yang benar, mulai 0 → A=0, B=1, C=2, D=3)
+  judulKuis: "Seberapa Kenal Kamu Sama Aku?",
   kuis: [
-    { tanya: "Di mana kita pertama kali bertemu?", pilihan: ["Kampus", "Kafe", "Konser", "Online"], jawaban: 1 },
-    { tanya: "Makanan favorit kita berdua?", pilihan: ["Bakso", "Sushi", "Martabak", "Seblak"], jawaban: 2 },
-    { tanya: "Siapa yang lebih sayang?", pilihan: ["Kamu", "Aku", "Dua-duanya", "Aku lah pokoknya"], jawaban: 3 }
+    { tanya: "Apa yang paling aku suka?", pilihan: ["Makan 🍜", "Tidur 😴", "Main HP 📱", "Kamu 🥰"], jawaban: 3 },
+    { tanya: "Apa yang paling gak aku suka?", pilihan: ["Hujan 🌧️", "Lihat kamu sedih 🥺", "Nunggu lama ⏳", "Macet 🚗"], jawaban: 1 },
+    { tanya: "Apa yang paling bikin aku nyaman?", pilihan: ["Kasur 🛏️", "Dengerin musik 🎶", "Ngobrol sama kamu 💖", "Ngopi ☕"], jawaban: 2 }
   ],
 
-  // Alasan-alasan (kartu flip)
+  // Kartu flip
+  judulAlasan: "Terima Kasih Untukmu",
   alasan: [
-    { ikon: "✨", depan: "Senyummu", belakang: "Senyummu bisa mengubah hari terburukku jadi yang terbaik." },
-    { ikon: "💖", depan: "Hatimu", belakang: "Hatimu yang tulus dan baik ke semua orang." },
-    { ikon: "😍", depan: "Tawamu", belakang: "Tawamu adalah lagu favoritku yang tidak pernah bosan kudengar." },
-    { ikon: "🌹", depan: "Perhatianmu", belakang: "Caramu peduli pada hal-hal kecil yang sering aku lupakan." },
-    { ikon: "👑", depan: "Kekuatanmu", belakang: "Kamu kuat, bahkan saat kamu merasa tidak." },
-    { ikon: "🦋", depan: "Dirimu", belakang: "Karena kamu adalah kamu — dan itu sudah lebih dari cukup." }
+    { ikon: "🙏", depan: "Doamu", belakang: "Terima kasih untuk setiap doa yang mungkin diam-diam kamu titipkan untukku." },
+    { ikon: "💪", depan: "Dukunganmu", belakang: "Terima kasih sudah selalu mendukungku, bahkan saat aku sendiri ragu." },
+    { ikon: "🌹", depan: "Kesabaranmu", belakang: "Terima kasih sudah sabar menghadapi sifat dan kesalahan-kesalahanku." },
+    { ikon: "📸", depan: "Kenangan Kita", belakang: "Terima kasih untuk semua kenangan, sejak pertama kita bertemu di MTsN." },
+    { ikon: "😊", depan: "Senyummu", belakang: "Terima kasih untuk senyum yang selalu bikin hariku terasa lebih ringan." },
+    { ikon: "🦋", depan: "Dirimu", belakang: "Terima kasih sudah jadi dirimu sendiri, dan pernah hadir dalam hidupku." }
   ],
 
   // Surat (baris baru = paragraf baru)
-  surat: `Selamat ulang tahun, sayangku.
+  surat: `Selamat ulang tahun yang ke-24, Sayangku.
 
-Hari ini dunia merayakan hadirnya seseorang yang paling istimewa — kamu. Terima kasih sudah menjadi alasan di balik senyumku, tempatku pulang, dan warna dalam setiap hari-hariku.
+Di hari spesialmu ini, aku ingin menuliskan sesuatu yang sudah lama ingin aku sampaikan.
 
-Semoga di usia yang baru ini, semua mimpimu perlahan jadi nyata, semua lelahmu terbayar, dan bahagia selalu menemukan jalannya padamu.
+Semua berawal dari MTsN. Dari pertemuan sederhana itu, kita pernah berjalan bersama, berbagi cerita, tawa, dan juga luka. Meskipun akhirnya kita sempat memilih jalan yang berbeda, kenangan itu tetap aku simpan dengan baik.
 
-Aku akan selalu ada di sini, merayakan setiap langkahmu.
+Aku mau minta maaf. Maaf untuk semua kesalahan yang pernah aku buat — untuk kata-kata yang mungkin pernah menyakitimu, untuk sikapku yang kadang egois, dan untuk saat-saat aku tidak ada ketika kamu butuh. Aku sadar aku belum sempurna, dan aku terus belajar untuk jadi lebih baik.
 
-Aku sayang kamu, hari ini dan seterusnya.`,
+Aku juga mau berterima kasih. Terima kasih untuk setiap dukungan yang kamu berikan, untuk setiap doa yang kamu titipkan untukku, dan untuk semua kebaikanmu selama ini. Semua itu sangat berarti buatku, lebih dari yang bisa aku ucapkan.
+
+Di usia 24 ini, semoga Allah selalu melimpahkan kesehatan, kebahagiaan, dan rezeki yang berkah untukmu. Semoga setiap langkahmu dimudahkan, semua impianmu tercapai, dan kamu selalu dikelilingi orang-orang yang tulus menyayangimu.
+
+Barakallahu fii umrik. Semoga bahagia selalu.`,
 
   // Harapan penutup
-  penutup: "Semoga tahun ini menjadi tahun terbaikmu ✨"
+  penutup: "Barakallahu fii umrik, Sayangku. Semoga bahagia selalu ✨"
 };
