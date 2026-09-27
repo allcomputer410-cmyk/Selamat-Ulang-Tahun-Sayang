@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Selamat Ulang Tahun, Sayang</title>
+  <meta name="description" content="Sebuah kejutan ulang tahun spesial untukmu." />
+  <meta name="theme-color" content="#07060b" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="locked">
+
+  <!-- Canvas efek global: bintang, kembang api, confetti -->
+  <canvas id="fx"></canvas>
+  <div id="cursor-glow"></div>
+  <div id="progress"></div>
+
+  <!-- ================= GERBANG / KOTAK HADIAH ================= -->
+  <section id="gate">
+    <div class="gate-aurora"></div>
+    <p class="gate-sub reveal-up">Ada sesuatu yang spesial untukmu…</p>
+    <div class="gift" id="gift" role="button" tabindex="0" aria-label="Buka hadiah">
+      <div class="gift-lid"><span class="bow"><i></i><i></i></span></div>
+      <div class="gift-box"></div>
+      <div class="gift-glow"></div>
+    </div>
+    <button class="btn-gold" id="openBtn"><span>Buka Kejutan</span></button>
+    <p class="gate-hint">🔊 nyalakan suara untuk pengalaman terbaik</p>
+  </section>
+
+  <!-- ================= KONTEN UTAMA ================= -->
+  <main id="main" aria-hidden="true">
+
+    <!-- Balon melayang -->
+    <div id="balloons"></div>
+
+    <!-- HERO -->
+    <section id="hero" class="section">
+      <div class="hero-rings"><i></i><i></i><i></i></div>
+      <p class="eyebrow" data-reveal>✦ Hari Paling Istimewa ✦</p>
+      <h1 class="hero-title" data-reveal>
+        <span class="line">Selamat</span>
+        <span class="line">Ulang Tahun</span>
+      </h1>
+      <h2 class="hero-name script" data-reveal id="heroName">Sayang</h2>
+      <div class="hero-age" data-reveal>
+        <div class="age-num" id="ageNum">0</div>
+        <div class="age-label">tahun penuh keajaiban</div>
+      </div>
+      <div class="stats" data-reveal>
+        <div><b id="statDays">0</b><span>hari</span></div>
+        <div><b id="statHours">0</b><span>jam</span></div>
+        <div><b id="statBeats">0</b><span>detak jantung*</span></div>
+      </div>
+      <a href="#cake" class="scroll-down"><span></span>Gulir ke bawah</a>
+    </section>
+
+    <!-- KUE -->
+    <section id="cake" class="section">
+      <h2 class="section-title" data-reveal>Tiup Lilinnya</h2>
+      <p class="section-sub" data-reveal>Buat permohonan, lalu tiup ke mikrofon — atau ketuk tombol di bawah.</p>
+      <div class="cake-stage" data-reveal>
+        <div class="cake-wrap">
+          <div class="candles" id="candles"></div>
+          <div class="tier tier-3"><div class="drip"></div></div>
+          <div class="tier tier-2"><div class="drip"></div></div>
+          <div class="tier tier-1"><div class="drip"></div></div>
+          <div class="plate"></div>
+        </div>
+      </div>
+      <div class="cake-actions" data-reveal>
+        <button class="btn-gold" id="blowBtn"><span>🎂 Tiup Lilin</span></button>
+        <button class="btn-ghost" id="micBtn">🎤 Pakai Mikrofon</button>
+      </div>
+      <p class="wish-done" id="wishDone">Permohonanmu sudah dikirim ke semesta ✨</p>
+    </section>
+
+    <!-- GALERI 3D -->
+    <section id="gallery" class="section">
+      <h2 class="section-title" data-reveal>Galeri Kenangan</h2>
+      <p class="section-sub" data-reveal>Seret untuk memutar · ketuk foto untuk memperbesar</p>
+      <div class="carousel-scene" id="scene" data-reveal>
+        <div class="carousel" id="carousel"></div>
+        <div class="carousel-floor"></div>
+      </div>
+    </section>
+
+    <!-- TIMELINE -->
+    <section id="story" class="section">
+      <h2 class="section-title" data-reveal>Cerita Kita</h2>
+      <div class="timeline" id="timeline"></div>
+    </section>
+
+    <!-- VIDEO -->
+    <section id="video" class="section">
+      <h2 class="section-title" data-reveal>Sebuah Video Untukmu</h2>
+      <div class="video-frame" data-reveal>
+        <div class="video-corner tl"></div><div class="video-corner tr"></div>
+        <div class="video-corner bl"></div><div class="video-corner br"></div>
+        <div class="video-inner" id="videoInner"></div>
+      </div>
+    </section>
+
+    <!-- ALASAN -->
+    <section id="reasons" class="section">
+      <h2 class="section-title" data-reveal>Alasan Aku Sayang Kamu</h2>
+      <p class="section-sub" data-reveal>Ketuk setiap kartu</p>
+      <div class="cards" id="cards"></div>
+    </section>
+
+    <!-- SURAT -->
+    <section id="letter" class="section">
+      <h2 class="section-title" data-reveal>Surat Untukmu</h2>
+      <div class="envelope" id="envelope" data-reveal role="button" tabindex="0" aria-label="Buka surat">
+        <div class="env-back"></div>
+        <div class="paper" id="paper">
+          <div class="paper-inner">
+            <p class="paper-to script">Untuk <span id="letterTo">Sayang</span>,</p>
+            <div class="paper-text" id="letterText"></div>
+            <p class="paper-from script">— <span id="letterFrom">Aku</span></p>
+          </div>
+        </div>
+        <div class="env-front"></div>
+        <div class="env-flap"></div>
+        <div class="seal">❤</div>
+      </div>
+      <p class="section-sub" id="envHint" data-reveal>Ketuk amplop untuk membuka</p>
+    </section>
+
+    <!-- PENUTUP -->
+    <section id="finale" class="section">
+      <h2 class="finale-title script" data-reveal>Happy Birthday</h2>
+      <p class="finale-text" id="finaleText" data-reveal></p>
+      <button class="btn-gold" id="celebrateBtn" data-reveal><span>🎆 Rayakan Lagi</span></button>
+      <p class="credit">dibuat dengan ❤ untuk <span id="creditName">kamu</span></p>
+    </section>
+  </main>
+
+  <!-- Kontrol musik -->
+  <button id="musicBtn" class="music-btn" aria-label="Musik">
+    <span class="eq"><i></i><i></i><i></i><i></i></span>
+  </button>
+
+  <!-- Lightbox -->
+  <div id="lightbox" aria-hidden="true">
+    <button class="lb-close" aria-label="Tutup">✕</button>
+    <button class="lb-nav lb-prev" aria-label="Sebelumnya">‹</button>
+    <figure><img id="lbImg" alt="" /><figcaption id="lbCap"></figcaption></figure>
+    <button class="lb-nav lb-next" aria-label="Berikutnya">›</button>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
