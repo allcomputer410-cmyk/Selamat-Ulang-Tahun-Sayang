@@ -76,10 +76,11 @@ Selama foto atau video belum ditambahkan, halaman menampilkan placeholder yang t
 
 ## ▶️ Menjalankan
 
-```bash
-python3 -m http.server 8000
-# buka http://localhost:8000
-```
+Tidak perlu install atau build apa pun. Pilih salah satu cara:
+
+- **Paling mudah:** klik dua kali `index.html` (atau `start index.html` di CMD). Tambahkan `?preview` di akhir alamat untuk melewati hitung mundur.
+- **Dengan Node.js:** `npm run dev` untuk pratinjau (melewati hitung mundur), `npm start` untuk versi asli, dan `npm run editor` untuk membuka editor.
+- **Dengan Python:** `python -m http.server 8000`, lalu buka http://localhost:8000
 
 Fitur mikrofon butuh **HTTPS** atau `localhost`.
 

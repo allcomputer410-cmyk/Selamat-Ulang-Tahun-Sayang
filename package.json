@@ -1,0 +1,11 @@
+{
+  "name": "selamat-ulang-tahun-sayang",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Website ucapan ulang tahun interaktif (HTML/CSS/JS murni, tanpa build).",
+  "scripts": {
+    "dev": "npx --yes http-server . -p 8000 -c-1 -o /?preview",
+    "start": "npx --yes http-server . -p 8000 -c-1 -o /",
+    "editor": "npx --yes http-server . -p 8000 -c-1 -o /editor.html"
+  }
+}
