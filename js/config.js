@@ -100,8 +100,8 @@ window.BIRTHDAY_CONFIG = {
   judulKuis: "Seberapa Kenal Kamu Sama Aku?",
   kuis: [
     { tanya: "Apa yang paling aku suka?", pilihan: ["Makan 🍜", "Tidur 😴", "Main HP 📱", "Kamu 🥰"], jawaban: 3 },
-    { tanya: "Apa yang paling gak aku suka?", pilihan: ["Hujan 🌧️", "Lihat kamu sedih 🥺", "Nunggu lama ⏳", "Macet 🚗"], jawaban: 1 },
-    { tanya: "Apa yang paling bikin aku nyaman?", pilihan: ["Kasur 🛏️", "Dengerin musik 🎶", "Ngobrol sama kamu 💖", "Ngopi ☕"], jawaban: 2 }
+    { tanya: "Apa yang paling gak aku suka?", pilihan: ["Hujan 🌧️", "Lihat kamu dekat sama orang lain, baik cowok atau cewek 😤", "Nunggu lama ⏳", "Macet 🚗"], jawaban: 1 },
+    { tanya: "Apa yang paling bikin aku nyaman?", pilihan: ["Kasur 🛏️", "Dengerin musik 🎶", "Peluk kamu dan dekat sama kamu 🤗", "Ngopi ☕"], jawaban: 2 }
   ],
 
   // Kartu flip
