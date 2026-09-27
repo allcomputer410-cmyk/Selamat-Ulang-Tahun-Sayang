@@ -817,3 +817,12 @@ span.emo, i.emo { width: auto; height: auto; }
 .sound-btn { margin-top: 22px; }
 .sound-btn[hidden] { display: none; }
 .video-empty p { color: var(--gold-1); font-family: var(--serif); font-style: italic; font-size: 1.1rem; }
+
+/* Video selalu pas di dalam bingkai (termasuk Safari/iPhone) */
+.video-frame { overflow: hidden; }
+.video-inner { position: relative; isolation: isolate; -webkit-mask-image: -webkit-radial-gradient(white, black); }
+.video-inner video, .video-inner iframe { position: absolute; inset: 0; width: 100%; height: 100%; }
+.video-frame.portrait .video-inner video { object-fit: cover; }
+.video-corner { display: none; }
+.now-clock { position: relative; margin-top: -18px; font-size: .8rem; letter-spacing: .08em; color: var(--muted); font-variant-numeric: tabular-nums; }
+.now-clock:empty { display: none; }

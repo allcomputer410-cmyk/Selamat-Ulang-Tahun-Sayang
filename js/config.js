@@ -18,7 +18,9 @@ window.BIRTHDAY_CONFIG = {
   // Tanggal & jam ulang tahun (YYYY-MM-DDTHH:MM, mengikuti jam di HP/laptop yang membuka).
   // Jika masih di masa depan, halaman menampilkan hitung mundur dan kado baru bisa dibuka saat waktunya tiba.
   // Kosongkan untuk langsung bisa dibuka. Tambahkan ?preview di URL untuk melewati hitung mundur.
-  tanggalUltah: "2026-09-28T00:00",
+  tanggalUltah: "2026-09-28T00:00:00+07:00", // tepat jam 00.00 WIB
+  zonaWaktu: "Asia/Jakarta",
+  labelZona: "WIB",
 
   // Emoji animasi (Google Noto Animated Emoji). false = pakai emoji biasa.
   // Emoji diambil dari assets/emoji/ (jalankan tools/emoji.py setelah menambah emoji baru);
@@ -55,8 +57,8 @@ window.BIRTHDAY_CONFIG = {
   // Video. Taruh file mp4 di assets/videos/ ATAU isi youtube dengan ID/link video YouTube.
   // Video tegak (dari HP) otomatis ditampilkan dengan bingkai tegak.
   video: {
-    src: "assets/videos/video.mp4",
-    poster: "assets/photos/video-poster.jpg",
+    src: "", // video kedua (kosong = bagian ini disembunyikan)
+    poster: "",
     tegak: true, // video potret dari HP (terdeteksi otomatis juga)
     youtube: "" // ID atau link YouTube, contoh: "https://youtu.be/dQw4w9WgXcQ" (jika diisi, src diabaikan)
   },
@@ -91,8 +93,8 @@ window.BIRTHDAY_CONFIG = {
 
   // Video hadiah dari Iput: punya bagian sendiri setelah kuis, TERKUNCI sampai game balon selesai
   // dan semua jawaban kuis benar, lalu otomatis diputar saat digulir ke bagiannya.
-  videoRahasia: "assets/videos/iput.mp4",
-  posterRahasia: "",
+  videoRahasia: "assets/videos/video.mp4",
+  posterRahasia: "assets/photos/video-poster.jpg",
 
   // Kuis kecil (jawaban = index pilihan yang benar, mulai 0 → A=0, B=1, C=2, D=3)
   judulKuis: "Seberapa Kenal Kamu Sama Aku?",

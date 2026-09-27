@@ -406,7 +406,7 @@
     // saat video diputar, kecilkan musik latar
     v.addEventListener("play", () => { if (Music.playing) { Music.stop(); musicBtn.classList.add("paused"); } });
     vi.appendChild(v);
-  } else videoEmpty();
+  } else $("#video").remove(); // belum ada video kedua → sembunyikan bagiannya
 
   // Kartu alasan
   const cards = $("#cards");
@@ -436,16 +436,25 @@
 
   // Hitung mundur sampai hari-H (opsional)
   const target = C.tanggalUltah ? new Date(C.tanggalUltah) : null;
+  // Jam sinkron: pakai jam server (header Date) agar tidak bergantung jam HP yang mungkin meleset
+  let clockOffset = 0;
+  const now = () => Date.now() + clockOffset;
+  fetch(location.href.split("#")[0], { method: "HEAD", cache: "no-store" })
+    .then(r => { const d = r.headers.get("Date"); if (d && !isNaN(new Date(d))) clockOffset = new Date(d) - Date.now(); })
+    .catch(() => { /* offline / file:// → pakai jam perangkat */ });
+  const ZONA = C.zonaWaktu || "Asia/Jakarta", ZONA_LABEL = C.labelZona || "WIB";
   if (target && !isNaN(target) && target > Date.now() && !/[?&](preview|draft)/.test(location.search)) {
     locked = true;
     const cd = $("#countdown"), btn = $("#openBtn"), btnLabel = btn.innerHTML;
     cd.hidden = false; btn.disabled = true; $("span", btn).textContent = "⏳ Belum waktunya…";
     const pad = n => String(n).padStart(2, "0");
+    const clock = $("#nowClock");
     const tick = () => {
-      const ms = target - Date.now();
+      const ms = target - now();
+      try { clock.textContent = "Sekarang " + new Date(now()).toLocaleTimeString("id-ID", { timeZone: ZONA, hour: "2-digit", minute: "2-digit", second: "2-digit" }) + " " + ZONA_LABEL; } catch (e) { /* abaikan */ }
       if (ms <= 0) {
         clearInterval(iv); locked = false; btn.disabled = false; btn.innerHTML = btnLabel;
-        cd.hidden = true; confetti(200); show(6, 300);
+        cd.hidden = true; clock.hidden = true; confetti(200); show(6, 300);
         return;
       }
       $("#cdD").textContent = pad(Math.floor(ms / 864e5));
@@ -867,8 +876,8 @@
   let iputVideo = null;
   if (C.videoRahasia) {
     const v = document.createElement("video");
-    v.playsInline = true; v.controls = true; v.preload = "metadata";
-    v.setAttribute("playsinline", "");
+    v.playsInline = true; v.controls = true; v.preload = "auto";
+    v.setAttribute("playsinline", ""); v.setAttribute("webkit-playsinline", "");
     if (C.posterRahasia) v.poster = src(C.posterRahasia);
     const fail = () => {
       iputVideo = null; iputSound.hidden = true;
@@ -888,12 +897,12 @@
     try { v.muted = false; await v.play(); iputSound.hidden = true; }
     catch (e) {
       // browser menolak autoplay bersuara → putar tanpa suara & tawarkan tombol suara
-      try { v.muted = true; await v.play(); iputSound.hidden = false; } catch (e2) { /* tunggu diketuk */ }
+      try { v.muted = true; v.setAttribute("muted", ""); await v.play(); iputSound.hidden = false; } catch (e2) { iputSound.hidden = false; }
     }
   }
   iputSound.addEventListener("click", () => {
     if (!iputVideo) return;
-    iputVideo.muted = false; iputVideo.play().catch(() => {});
+    iputVideo.muted = false; iputVideo.removeAttribute("muted"); iputVideo.play().catch(() => {});
     iputSound.hidden = true;
   });
   if ($("#iput")) {
